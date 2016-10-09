@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto" >
+
+    <item
+        android:title="@string/sort_by_string"
+        android:id="@+id/main_menu_spinner"
+        android:entries = "@array/sorting_options"
+        android:entryValues = "@array/sorting_options_values"
+        app:showAsAction="ifRoom"
+        app:actionViewClass="android.widget.Spinner" />
+</menu>
