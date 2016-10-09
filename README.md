@@ -1,4 +1,4 @@
-##Udacity's Android Developer Nanodegree: Popular Movies Project stage 1
+##Udacity's Android Developer Nanodegree: Popular Movies Project stage 2
 
   This is the first app of the Nanodegree program in which the user will be able to:
   * See the movie posters in the main activity.
