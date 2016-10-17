@@ -59,18 +59,6 @@ public class MainGridFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-
-            backgroundTask = new FetchPopularMoviesTask(getActivity(),adapter);
-            if (option==0){
-                backgroundTask.execute(FetchPopularMoviesTask.POPULAR_MOVIES);
-            }
-            if (option==1){
-                backgroundTask.execute(FetchPopularMoviesTask.TOP_RATED_MOVIES);
-            }
-            if (!isNetworkConectivityOnline()){
-                Toast.makeText(getActivity(),"Couldn't refresh info",Toast.LENGTH_SHORT).show();
-            }
-
     }
 
     @Override
