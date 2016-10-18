@@ -7,6 +7,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Created by guillermo on 11/09/16.
@@ -27,6 +28,8 @@ public class MovieItem implements Serializable{
     private long voteCount;
     private boolean video;
     private double voteAverage;
+
+    private List<VideoMovieInfo> videos;
 
     public  static  final String IMAGE_SIZE_W154="w154";
     public  static  final String IMAGE_SIZE_W185="w185";
@@ -135,4 +138,11 @@ public class MovieItem implements Serializable{
         return null;
     }
 
+    public List<VideoMovieInfo> getVideos() {
+        return videos;
+    }
+
+    public void setVideos(List<VideoMovieInfo> videos) {
+        this.videos = videos;
+    }
 }
