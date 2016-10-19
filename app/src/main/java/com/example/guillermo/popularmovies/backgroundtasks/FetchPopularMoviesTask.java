@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import com.example.guillermo.popularmovies.BuildConfig;
 import com.example.guillermo.popularmovies.model.MovieItem;
+import com.example.guillermo.popularmovies.model.ReviewMovieInfo;
 import com.example.guillermo.popularmovies.model.VideoMovieInfo;
 
 import org.json.JSONArray;
@@ -33,6 +34,8 @@ public class FetchPopularMoviesTask extends AsyncTask<String, Void, List<MovieIt
     private final String POPULAR_MOVIES_URL = "http://api.themoviedb.org/3/movie/";
 
     private String POPULAR_MOVIES_VIDEO_URL = "http://api.themoviedb.org/3/movie/$movie_id/videos";
+
+    private String POPULAR_MOVIES_REVIEW_URL = "http://api.themoviedb.org/3/movie/$movie_id/reviews";
 
     public static final String POPULAR_MOVIES = "popular";
     public static final String TOP_RATED_MOVIES = "top_rated";
@@ -64,13 +67,20 @@ public class FetchPopularMoviesTask extends AsyncTask<String, Void, List<MovieIt
                         }
                         for (int i = 0; i < results.length; i++) {
                             MovieItem movieItem = MovieItem.toMovieItemFromJson(results[i]);
-                            //TODO: call the method that attaches the video info to the movie item
                             String[] videoResults=queryVideoInfo(movieItem);
                             List<VideoMovieInfo> listOfVideos = new ArrayList<>();
                             for (int j = 0; j<videoResults.length;j++){
                                 listOfVideos.add(VideoMovieInfo.toVideoMovieInfoFromJson(videoResults[j]));
                             }
                             movieItem.setVideos(listOfVideos);
+                            List<ReviewMovieInfo> reviewMovieInfoResults = new ArrayList<>();
+                            videoResults = queryReviewInfo(movieItem);
+                            if(videoResults!=null){
+                                for (int j = 0; j<videoResults.length;j++){
+                                    reviewMovieInfoResults.add(ReviewMovieInfo.fromJsonToReviewMovieInfo(videoResults[j]));
+                                }
+                                movieItem.setReviews(reviewMovieInfoResults);
+                            }
                             listMovieItem.add(movieItem);
                         }
                     }
@@ -196,6 +206,54 @@ public class FetchPopularMoviesTask extends AsyncTask<String, Void, List<MovieIt
         }
         try {
             String strUrl = POPULAR_MOVIES_VIDEO_URL.replace("$movie_id",movieItem.getMovieId())+"?api_key="+THE_MOVIEDB_API_KEY;
+            URL url = new URL(strUrl);
+            urlConnection = (HttpURLConnection) url.openConnection();
+            urlConnection.setRequestMethod("GET");
+            urlConnection.connect();
+
+            // Read the input stream into a String
+            InputStream inputStream = urlConnection.getInputStream();
+            StringBuffer buffer = new StringBuffer();
+            if (inputStream == null) {
+                // Nothing to do.
+                return null;
+            }
+            reader = new BufferedReader(new InputStreamReader(inputStream));
+
+            String line;
+            while ((line = reader.readLine()) != null) {
+                // Since it's JSON, adding a newline isn't necessary (it won't affect parsing)
+                // But it does make debugging a *lot* easier if you print out the completed
+                // buffer for debugging.
+                buffer.append(line + "\n");
+            }
+
+
+            if (buffer.length() == 0) {
+                // Stream was empty.  No point in parsing.
+                return null;
+            }
+
+            forecastJsonStr = buffer.toString();
+            Log.v("ForecastFragment", " json string: " + forecastJsonStr);
+
+        } catch (Exception e) {
+            Log.e(LOG_TAG, e.getMessage());
+        }
+        return getListFromJson(forecastJsonStr);
+    }
+
+    private String[] queryReviewInfo(MovieItem movieItem){
+        HttpURLConnection urlConnection;
+        BufferedReader reader = null;
+        String forecastJsonStr = "";
+        String THE_MOVIEDB_API_KEY = BuildConfig.THE_MOVIEDB_API_KEY;
+        //this part of the code was taken from the sunshine example on how to retreive the data from a rest api
+        if(!isNetworkConectivityOnline()){
+            return null;
+        }
+        try {
+            String strUrl = POPULAR_MOVIES_REVIEW_URL.replace("$movie_id",movieItem.getMovieId())+"?api_key="+THE_MOVIEDB_API_KEY;
             URL url = new URL(strUrl);
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("GET");

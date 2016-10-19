@@ -31,6 +31,8 @@ public class MovieItem implements Serializable{
 
     private List<VideoMovieInfo> videos;
 
+    private List<ReviewMovieInfo> reviews;
+
     public  static  final String IMAGE_SIZE_W154="w154";
     public  static  final String IMAGE_SIZE_W185="w185";
     public  static  final String IMAGE_SIZE_W342="w342";
@@ -144,5 +146,13 @@ public class MovieItem implements Serializable{
 
     public void setVideos(List<VideoMovieInfo> videos) {
         this.videos = videos;
+    }
+
+    public List<ReviewMovieInfo> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(List<ReviewMovieInfo> reviews) {
+        this.reviews = reviews;
     }
 }
