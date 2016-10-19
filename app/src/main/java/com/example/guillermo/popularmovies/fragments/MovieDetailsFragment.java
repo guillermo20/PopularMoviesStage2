@@ -1,6 +1,8 @@
 package com.example.guillermo.popularmovies.fragments;
 
 import android.app.Fragment;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -42,7 +44,22 @@ public class MovieDetailsFragment extends Fragment {
         textViewSynopsis.setText("Synopsis: "+movieItem.getOverview());
         ImageView imageView = (ImageView) rootView.findViewById(R.id.image_thumbnail);
         Picasso.with(getActivity()).load(movieItem.getBackdropUri(MovieItem.IMAGE_SIZE_W500)).error(R.drawable.error).into(imageView);
+        ImageView videoImageView = (ImageView) rootView.findViewById(R.id.video_intent);
+        if (!movieItem.getVideos().isEmpty()){
+            Log.i(LOG_TAG,"the movie has videos!!");
+            videoImageView.setVisibility(View.VISIBLE);
+            videoImageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.i(LOG_TAG,"the video intent must be called");
 
+                    String youtubeUrl = "https://www.youtube.com/watch?v="+movieItem.getVideos().get(0).getKey();
+                    Intent intent = new Intent(Intent.ACTION_VIEW);
+                    intent.setData(Uri.parse(youtubeUrl));
+                    startActivity(intent);
+                }
+            });
+        }
         return rootView;
     }
 }
