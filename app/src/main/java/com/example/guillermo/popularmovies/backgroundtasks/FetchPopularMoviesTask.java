@@ -67,17 +67,19 @@ public class FetchPopularMoviesTask extends AsyncTask<String, Void, List<MovieIt
                         }
                         for (int i = 0; i < results.length; i++) {
                             MovieItem movieItem = MovieItem.toMovieItemFromJson(results[i]);
-                            String[] videoResults=queryVideoInfo(movieItem);
+                            String[] queryResults=queryVideoInfo(movieItem);
                             List<VideoMovieInfo> listOfVideos = new ArrayList<>();
-                            for (int j = 0; j<videoResults.length;j++){
-                                listOfVideos.add(VideoMovieInfo.toVideoMovieInfoFromJson(videoResults[j]));
+                            if(queryResults!=null){
+                                for (int j = 0; j<queryResults.length;j++){
+                                    listOfVideos.add(VideoMovieInfo.toVideoMovieInfoFromJson(queryResults[j]));
+                                }
                             }
                             movieItem.setVideos(listOfVideos);
                             List<ReviewMovieInfo> reviewMovieInfoResults = new ArrayList<>();
-                            videoResults = queryReviewInfo(movieItem);
-                            if(videoResults!=null){
-                                for (int j = 0; j<videoResults.length;j++){
-                                    reviewMovieInfoResults.add(ReviewMovieInfo.fromJsonToReviewMovieInfo(videoResults[j]));
+                            queryResults = queryReviewInfo(movieItem);
+                            if(queryResults!=null){
+                                for (int j = 0; j<queryResults.length;j++){
+                                    reviewMovieInfoResults.add(ReviewMovieInfo.fromJsonToReviewMovieInfo(queryResults[j]));
                                 }
                                 movieItem.setReviews(reviewMovieInfoResults);
                             }
