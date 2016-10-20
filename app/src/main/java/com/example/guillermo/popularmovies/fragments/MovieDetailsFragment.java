@@ -8,12 +8,20 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.guillermo.popularmovies.R;
 import com.example.guillermo.popularmovies.model.MovieItem;
+import com.example.guillermo.popularmovies.model.ReviewMovieInfo;
 import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by guillermo on 17/09/16.
@@ -23,6 +31,8 @@ public class MovieDetailsFragment extends Fragment {
     private final String LOG_TAG=MovieDetailsFragment.class.getSimpleName();
 
     private MovieItem movieItem;
+
+    ArrayAdapter<String> reviewAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -60,6 +70,28 @@ public class MovieDetailsFragment extends Fragment {
                 }
             });
         }
+
+        String[] result = returnReviews(movieItem);
+        if(result!=null){
+            List<String> data= new ArrayList<String>(Arrays.asList(result));
+            reviewAdapter = new ArrayAdapter<String>(getActivity(),R.layout.review_item,R.id.review_textview,data);
+            ListView reviewsListview = (ListView) rootView.findViewById(R.id.reviews_list_view_id);
+            reviewsListview.setAdapter(reviewAdapter);
+        }
+
         return rootView;
+    }
+
+    private String[] returnReviews(MovieItem movieItem){
+        int i=0;
+        if(!movieItem.getReviews().isEmpty()){
+            String result[] = new String[movieItem.getReviews().size()];
+            for (ReviewMovieInfo review: movieItem.getReviews()) {
+                result[i]=review.getContent();
+                i++;
+            }
+            return result;
+        }
+        return null;
     }
 }

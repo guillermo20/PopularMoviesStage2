@@ -43,4 +43,8 @@ public class ReviewMovieInfo implements Serializable {
         }
         return null;
     }
+
+    public String getContent() {
+        return content;
+    }
 }
