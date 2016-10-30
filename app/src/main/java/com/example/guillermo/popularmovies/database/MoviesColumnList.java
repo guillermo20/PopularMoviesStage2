@@ -2,8 +2,8 @@ package com.example.guillermo.popularmovies.database;
 
 import net.simonvt.schematic.annotation.AutoIncrement;
 import net.simonvt.schematic.annotation.DataType;
-import net.simonvt.schematic.annotation.NotNull;
 import net.simonvt.schematic.annotation.PrimaryKey;
+import net.simonvt.schematic.annotation.Unique;
 
 /**
  * Created by guillermo on 10/24/16.
@@ -15,7 +15,7 @@ public interface MoviesColumnList {
     @AutoIncrement
     String _ID = "_id";
 
-    @DataType(DataType.Type.TEXT) @NotNull
+    @DataType(DataType.Type.TEXT) @Unique
     String MOVIE_ID = "movie_id";
 
     @DataType(DataType.Type.TEXT)

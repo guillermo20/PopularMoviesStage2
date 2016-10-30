@@ -23,7 +23,7 @@ public class MoviesSyncService extends Service {
         Log.d("MoviesSyncService", "onCreate - MoviesSyncService");
         synchronized (sSyncAdapterLock) {
             if (mSyncAdapter == null) {
-                mSyncAdapter = new MoviesSyncAdapter(getApplicationContext(), true);
+                mSyncAdapter = new MoviesSyncAdapter(getApplicationContext(), true, MoviesSyncAdapter.POPULAR_MOVIES);
             }
         }
     }
