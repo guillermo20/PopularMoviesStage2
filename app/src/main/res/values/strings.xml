@@ -2,4 +2,8 @@
     <string name="app_name">Popular Movies</string>
     <string name="sort_by_string">Sort by</string>
     <string name="title_activity_movie_detail">Movie Details</string>
+
+    <!-- sync adapter related !-->
+    <string name="sync_account_type">guillermo.example.com</string>
+    <string name="content_authority">com.example.guillermo.popularmovies</string>
 </resources>

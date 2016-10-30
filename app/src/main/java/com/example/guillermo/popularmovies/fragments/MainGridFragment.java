@@ -19,7 +19,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.example.guillermo.popularmovies.MovieDetailActivity;
 import com.example.guillermo.popularmovies.R;
@@ -59,6 +58,13 @@ public class MainGridFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        //MoviesSyncAdapter.syncImmediately(getActivity());
     }
 
     @Override
