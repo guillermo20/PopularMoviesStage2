@@ -24,10 +24,10 @@ public final class PopularMoviesDataBase {
 
     @OnCreate
     public static void onCreate(Context context, SQLiteDatabase db) {
-        System.out.println("********************** DATABASE CREATED ***************************");
-        Log.i(PopularMoviesDataBase.class.getSimpleName(),"********************** DATABASE CREATED ***************************");
+        Log.i("PopularMoviesDataBase"," database OnCreate Executed ");
     }
 
     @ExecOnCreate
     public static final String EXEC_ON_CREATE = "SELECT * FROM " + MOVIES;
+
 }

@@ -5,6 +5,7 @@ import android.accounts.AccountManager;
 import android.content.AbstractThreadedSyncAdapter;
 import android.content.ContentProviderClient;
 import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.SyncResult;
 import android.net.ConnectivityManager;
@@ -14,7 +15,11 @@ import android.util.Log;
 
 import com.example.guillermo.popularmovies.BuildConfig;
 import com.example.guillermo.popularmovies.R;
+import com.example.guillermo.popularmovies.database.MoviesColumnList;
+import com.example.guillermo.popularmovies.database.PopularMoviesProvider;
 import com.example.guillermo.popularmovies.model.MovieItem;
+import com.example.guillermo.popularmovies.model.ReviewMovieInfo;
+import com.example.guillermo.popularmovies.model.VideoMovieInfo;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -25,6 +30,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -43,7 +49,7 @@ public class MoviesSyncAdapter extends AbstractThreadedSyncAdapter {
 
     public static final String POPULAR_MOVIES = "popular";
     public static final String TOP_RATED_MOVIES = "top_rated";
-    private List<MovieItem> listMovieItem;
+    //private List<MovieItem> listMovieItem;
 
     private String sortingParam;
 
@@ -57,12 +63,13 @@ public class MoviesSyncAdapter extends AbstractThreadedSyncAdapter {
 
     @Override
     public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
+        List<MovieItem> listMovieItem;
+        List<ContentValues> moviecontentlist;
         Log.i(LOG_TAG,"********************* on permform sync called *********************** ");
-        /*String[] results = queryTheMoviedb(sortingParam);
+        String[] results = queryTheMoviedb(sortingParam);
         if (results != null) {
-            if (listMovieItem == null) {
-                listMovieItem = new ArrayList<>();
-            }
+            listMovieItem = new ArrayList<>();
+            moviecontentlist = new ArrayList<>();
             for (int i = 0; i < results.length; i++) {
                 MovieItem movieItem = MovieItem.toMovieItemFromJson(results[i]);
                 String[] queryResults=queryVideoInfo(movieItem);
@@ -82,8 +89,22 @@ public class MoviesSyncAdapter extends AbstractThreadedSyncAdapter {
                     movieItem.setReviews(reviewMovieInfoResults);
                 }
                 listMovieItem.add(movieItem);
+
+                ContentValues movieContentValues = new ContentValues();
+                movieContentValues.put(MoviesColumnList.MOVIE_ID,movieItem.getMovieId());
+                movieContentValues.put(MoviesColumnList.TITLE,movieItem.getTitle());
+                movieContentValues.put(MoviesColumnList.BACKDROP_PATH,movieItem.getBackdropPath());
+                movieContentValues.put(MoviesColumnList.RELEASE_DATE,movieItem.getReleaseDate());
+                movieContentValues.put(MoviesColumnList.POSTERPATH,movieItem.getPosterPath());
+                movieContentValues.put(MoviesColumnList.OVERVIEW,movieItem.getOverview());
+                moviecontentlist.add(movieContentValues);
             }
-        }*/
+            if(!moviecontentlist.isEmpty()){
+                ContentValues[] contentArray = new ContentValues[moviecontentlist.size()];
+                moviecontentlist.toArray(contentArray);
+                context.getContentResolver().bulkInsert(PopularMoviesProvider.Movies.MOVIES_URI,contentArray);
+            }
+        }
     }
 
     public static void syncImmediately(Context context) {
@@ -191,11 +212,6 @@ public class MoviesSyncAdapter extends AbstractThreadedSyncAdapter {
         }
         return results;
     }
-
-    public List<MovieItem> getListMovieItem() {
-        return listMovieItem;
-    }
-
 
     /**
      * checks if the smartphone has an active conection to internet.

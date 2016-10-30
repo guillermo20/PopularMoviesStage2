@@ -1,6 +1,7 @@
 package com.example.guillermo.popularmovies.database;
 
 import net.simonvt.schematic.annotation.AutoIncrement;
+import net.simonvt.schematic.annotation.ConflictResolutionType;
 import net.simonvt.schematic.annotation.DataType;
 import net.simonvt.schematic.annotation.PrimaryKey;
 import net.simonvt.schematic.annotation.Unique;
@@ -15,7 +16,7 @@ public interface MoviesColumnList {
     @AutoIncrement
     String _ID = "_id";
 
-    @DataType(DataType.Type.TEXT) @Unique
+    @DataType(DataType.Type.TEXT) @Unique(onConflict = ConflictResolutionType.REPLACE)
     String MOVIE_ID = "movie_id";
 
     @DataType(DataType.Type.TEXT)
@@ -53,4 +54,5 @@ public interface MoviesColumnList {
 
     @DataType(DataType.Type.REAL)
     String VOTE_AVERAGE = "vote_average";
+
 }

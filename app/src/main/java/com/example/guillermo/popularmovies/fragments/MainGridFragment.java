@@ -95,7 +95,7 @@ public class MainGridFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Log.v(LOG_TAG,"clicked on item from spinner");
-                option=position;
+                /*option=position;
                 backgroundTask = new FetchPopularMoviesTask(getActivity(),adapter);
                 switch (position){
                     case 0:
@@ -104,7 +104,7 @@ public class MainGridFragment extends Fragment {
                     case 1:
                         backgroundTask.execute(FetchPopularMoviesTask.TOP_RATED_MOVIES);
                         break;
-                }
+                }*/
             }
 
             @Override
