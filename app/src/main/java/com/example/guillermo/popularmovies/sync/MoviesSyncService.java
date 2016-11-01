@@ -23,12 +23,12 @@ public class MoviesSyncService extends Service {
         Log.d("MoviesSyncService", "onCreate - MoviesSyncService");
         synchronized (sSyncAdapterLock) {
             if (mSyncAdapter == null) {
-                mSyncAdapter = new MoviesSyncAdapter(getApplicationContext(), true, MoviesSyncAdapter.POPULAR_MOVIES);
+                mSyncAdapter = new MoviesSyncAdapter(getApplicationContext(), true);
             }
         }
     }
 
-    // NOTE to self when overriding this method implementing Services erease the nullable annotation cuz it screws up the initialization
+    // NOTE to self when overriding this method implementing Services erease the nullable annotation cuz it mess up the initialization
     @Override
     public IBinder onBind(Intent intent) {
         return mSyncAdapter.getSyncAdapterBinder();

@@ -3,6 +3,7 @@ package com.example.guillermo.popularmovies.fragments;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -24,7 +25,9 @@ import com.example.guillermo.popularmovies.MovieDetailActivity;
 import com.example.guillermo.popularmovies.R;
 import com.example.guillermo.popularmovies.adapters.GridAdapter;
 import com.example.guillermo.popularmovies.backgroundtasks.FetchPopularMoviesTask;
+import com.example.guillermo.popularmovies.enums.SortingMethod;
 import com.example.guillermo.popularmovies.model.MovieItem;
+import com.example.guillermo.popularmovies.sync.MoviesSyncAdapter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -95,6 +98,7 @@ public class MainGridFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Log.v(LOG_TAG,"clicked on item from spinner");
+
                 /*option=position;
                 backgroundTask = new FetchPopularMoviesTask(getActivity(),adapter);
                 switch (position){
@@ -105,6 +109,19 @@ public class MainGridFragment extends Fragment {
                         backgroundTask.execute(FetchPopularMoviesTask.TOP_RATED_MOVIES);
                         break;
                 }*/
+                SharedPreferences.Editor editor = getActivity().getSharedPreferences(SortingMethod.class.getSimpleName().toLowerCase(),Context.MODE_PRIVATE).edit();
+                switch (position){
+                    case 0:
+                        editor.putString(SortingMethod.class.getSimpleName().toLowerCase(),SortingMethod.POPULAR_MOVIES_SORT.getCode());
+                        editor.commit();
+                        MoviesSyncAdapter.syncImmediately(getActivity());
+                        break;
+                    case 1:
+                        editor.putString(SortingMethod.class.getSimpleName().toLowerCase(),SortingMethod.TOP_RATED_MOVIES_SORT.getCode());
+                        editor.commit();
+                        MoviesSyncAdapter.syncImmediately(getActivity());
+                        break;
+                }
             }
 
             @Override

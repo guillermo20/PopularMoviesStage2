@@ -3,8 +3,11 @@ package com.example.guillermo.popularmovies.database;
 import net.simonvt.schematic.annotation.AutoIncrement;
 import net.simonvt.schematic.annotation.ConflictResolutionType;
 import net.simonvt.schematic.annotation.DataType;
+import net.simonvt.schematic.annotation.DefaultValue;
 import net.simonvt.schematic.annotation.PrimaryKey;
 import net.simonvt.schematic.annotation.Unique;
+
+import java.util.function.BooleanSupplier;
 
 /**
  * Created by guillermo on 10/24/16.
@@ -54,5 +57,11 @@ public interface MoviesColumnList {
 
     @DataType(DataType.Type.REAL)
     String VOTE_AVERAGE = "vote_average";
+
+    @DataType(DataType.Type.TEXT) @DefaultValue("false")
+    String FAVORITE_FLAG = "favorite_flag";
+
+    @DataType(DataType.Type.TEXT)
+    String SORT_TYPE = "sort_type";
 
 }

@@ -7,6 +7,7 @@ import android.content.ContentProviderClient;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.SyncResult;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -17,6 +18,7 @@ import com.example.guillermo.popularmovies.BuildConfig;
 import com.example.guillermo.popularmovies.R;
 import com.example.guillermo.popularmovies.database.MoviesColumnList;
 import com.example.guillermo.popularmovies.database.PopularMoviesProvider;
+import com.example.guillermo.popularmovies.enums.SortingMethod;
 import com.example.guillermo.popularmovies.model.MovieItem;
 import com.example.guillermo.popularmovies.model.ReviewMovieInfo;
 import com.example.guillermo.popularmovies.model.VideoMovieInfo;
@@ -55,17 +57,18 @@ public class MoviesSyncAdapter extends AbstractThreadedSyncAdapter {
 
     private Context context;
 
-    public MoviesSyncAdapter(Context context, boolean autoInitialize,String sortingParam) {
+    public MoviesSyncAdapter(Context context, boolean autoInitialize) {
         super(context, autoInitialize);
-        this.sortingParam = sortingParam;
         this.context = context;
     }
 
     @Override
     public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
+        SharedPreferences editor = context.getSharedPreferences(SortingMethod.class.getSimpleName().toLowerCase(),Context.MODE_PRIVATE);
+        String sortingParam = editor.getString(SortingMethod.class.getSimpleName().toLowerCase(),"");
         List<MovieItem> listMovieItem;
         List<ContentValues> moviecontentlist;
-        Log.i(LOG_TAG,"********************* on permform sync called *********************** ");
+        Log.i(LOG_TAG,"********************* on permform sync called *********************** sortingParam = "+sortingParam);
         String[] results = queryTheMoviedb(sortingParam);
         if (results != null) {
             listMovieItem = new ArrayList<>();
