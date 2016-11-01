@@ -64,8 +64,8 @@ public class MoviesSyncAdapter extends AbstractThreadedSyncAdapter {
 
     @Override
     public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
-        SharedPreferences editor = context.getSharedPreferences(SortingMethod.class.getSimpleName().toLowerCase(),Context.MODE_PRIVATE);
-        String sortingParam = editor.getString(SortingMethod.class.getSimpleName().toLowerCase(),"");
+        SharedPreferences prefs = context.getSharedPreferences(SortingMethod.class.getSimpleName().toLowerCase(),Context.MODE_PRIVATE);
+        String sortingParam = prefs.getString(SortingMethod.class.getSimpleName().toLowerCase(),SortingMethod.POPULAR_MOVIES_SORT.getCode());
         List<MovieItem> listMovieItem;
         List<ContentValues> moviecontentlist;
         Log.i(LOG_TAG,"********************* on permform sync called *********************** sortingParam = "+sortingParam);
