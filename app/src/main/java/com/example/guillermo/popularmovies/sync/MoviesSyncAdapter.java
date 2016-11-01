@@ -159,41 +159,44 @@ public class MoviesSyncAdapter extends AbstractThreadedSyncAdapter {
         if(!isNetworkConectivityOnline()){
             return null;
         }
-        try {
-            URL url = new URL(POPULAR_MOVIES_URL + sortType + "?api_key="+THE_MOVIEDB_API_KEY);
-            urlConnection = (HttpURLConnection) url.openConnection();
-            urlConnection.setRequestMethod("GET");
-            urlConnection.connect();
+        if(sortType.equals(SortingMethod.POPULAR_MOVIES_SORT.getCode()) || sortType.equals(SortingMethod.TOP_RATED_MOVIES_SORT.getCode())) {
+            try {
+                URL url = new URL(POPULAR_MOVIES_URL + sortType + "?api_key=" + THE_MOVIEDB_API_KEY);
+                urlConnection = (HttpURLConnection) url.openConnection();
+                urlConnection.setRequestMethod("GET");
+                urlConnection.connect();
 
-            // Read the input stream into a String
-            InputStream inputStream = urlConnection.getInputStream();
-            StringBuffer buffer = new StringBuffer();
-            if (inputStream == null) {
-                // Nothing to do.
-                return null;
+                // Read the input stream into a String
+                InputStream inputStream = urlConnection.getInputStream();
+                StringBuffer buffer = new StringBuffer();
+                if (inputStream == null) {
+                    // Nothing to do.
+                    return null;
+                }
+                reader = new BufferedReader(new InputStreamReader(inputStream));
+
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    // Since it's JSON, adding a newline isn't necessary (it won't affect parsing)
+                    // But it does make debugging a *lot* easier if you print out the completed
+                    // buffer for debugging.
+                    buffer.append(line + "\n");
+                }
+
+
+                if (buffer.length() == 0) {
+                    // Stream was empty.  No point in parsing.
+                    return null;
+                }
+
+                forecastJsonStr = buffer.toString();
+                Log.v("ForecastFragment", " json string: " + forecastJsonStr);
+
+            } catch (Exception e) {
+                Log.e(LOG_TAG, e.getMessage());
             }
-            reader = new BufferedReader(new InputStreamReader(inputStream));
-
-            String line;
-            while ((line = reader.readLine()) != null) {
-                // Since it's JSON, adding a newline isn't necessary (it won't affect parsing)
-                // But it does make debugging a *lot* easier if you print out the completed
-                // buffer for debugging.
-                buffer.append(line + "\n");
-            }
-
-
-            if (buffer.length() == 0) {
-                // Stream was empty.  No point in parsing.
-                return null;
-            }
-
-            forecastJsonStr = buffer.toString();
-            Log.v("ForecastFragment", " json string: " + forecastJsonStr);
-
-        } catch (Exception e) {
-            Log.e(LOG_TAG, e.getMessage());
         }
+        //TODO: find the favorited movies to return from the DB
         return getListFromJson(forecastJsonStr);
     }
 
