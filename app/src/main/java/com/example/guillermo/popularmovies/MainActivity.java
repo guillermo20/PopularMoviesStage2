@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import com.example.guillermo.popularmovies.fragments.MainGridFragment;
-import com.example.guillermo.popularmovies.sync.MoviesSyncAdapter;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -15,6 +14,5 @@ public class MainActivity extends AppCompatActivity {
         if(savedInstanceState==null){
             getFragmentManager().beginTransaction().add(R.id.main_id,new MainGridFragment()).commit();
         }
-        MoviesSyncAdapter.syncImmediately(this);
     }
 }
