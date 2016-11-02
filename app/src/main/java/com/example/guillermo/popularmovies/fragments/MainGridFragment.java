@@ -146,7 +146,7 @@ public class MainGridFragment extends Fragment implements LoaderManager.LoaderCa
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        Uri movieUri = PopularMoviesProvider.Movies.MOVIES_URI;
+        Uri movieUri = PopularMoviesProvider.Movies.CONTENT_URI;
         Log.i(LOG_TAG,"************ onCreateLoader  **********");
         Log.i(LOG_TAG," URI = "+ movieUri.toString());
         return new CursorLoader(getActivity(),
@@ -161,8 +161,11 @@ public class MainGridFragment extends Fragment implements LoaderManager.LoaderCa
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         Log.i(LOG_TAG,"******* LOAD FINISHED *******************");
         if (data.moveToFirst()){
-            Log.i(LOG_TAG,"******* DATA FROM DATABASE = path "+data.getString(2));
+            do {
+                Log.i(LOG_TAG,"******* DATA FROM DATABASE - Title ["+data.getString(2)+"]");
+            }while (data.moveToNext());
         }
+
     }
 
     @Override

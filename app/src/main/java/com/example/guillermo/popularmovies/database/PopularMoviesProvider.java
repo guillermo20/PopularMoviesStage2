@@ -24,7 +24,7 @@ public final class PopularMoviesProvider {
         @ContentUri(
                 path = "movies",
                 type = "vnd.android.cursor.dir/movie")
-        public static final Uri MOVIES_URI = Uri.parse("content://" + AUTHORITY + "/movies");
+        public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/movies");
     }
 
     @TableEndpoint(table = PopularMoviesDataBase.REVIEWS) public static class Reviews {
@@ -32,7 +32,7 @@ public final class PopularMoviesProvider {
         @ContentUri(
                 path = "reviews",
                 type = "vnd.android.cursor.dir/review")
-        public static final Uri REVIEWS_URI = Uri.parse("content://" + AUTHORITY + "/reviews");
+        public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/reviews");
     }
 
     @TableEndpoint(table = PopularMoviesDataBase.TRAILERS) public static class Trailers {
@@ -40,6 +40,6 @@ public final class PopularMoviesProvider {
         @ContentUri(
                 path = "trailers",
                 type = "vnd.android.cursor.dir/trailer")
-        public static final Uri TRAILERS_URI = Uri.parse("content://" + AUTHORITY + "/trailers");
+        public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/trailers");
     }
 }

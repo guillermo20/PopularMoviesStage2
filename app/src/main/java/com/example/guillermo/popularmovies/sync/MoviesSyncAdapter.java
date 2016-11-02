@@ -105,7 +105,7 @@ public class MoviesSyncAdapter extends AbstractThreadedSyncAdapter {
             if(!moviecontentlist.isEmpty()){
                 ContentValues[] contentArray = new ContentValues[moviecontentlist.size()];
                 moviecontentlist.toArray(contentArray);
-                context.getContentResolver().bulkInsert(PopularMoviesProvider.Movies.MOVIES_URI,contentArray);
+                context.getContentResolver().bulkInsert(PopularMoviesProvider.Movies.CONTENT_URI,contentArray);
             }
         }
     }

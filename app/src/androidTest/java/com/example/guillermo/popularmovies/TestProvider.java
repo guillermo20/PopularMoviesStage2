@@ -51,7 +51,7 @@ public class TestProvider extends AndroidTestCase {
 
         ContentValues values = createMovieValues();
 
-        Uri uri = mContext.getContentResolver().insert(com.example.guillermo.popularmovies.database.PopularMoviesProvider.Movies.MOVIES_URI,values);
+        Uri uri = mContext.getContentResolver().insert(com.example.guillermo.popularmovies.database.PopularMoviesProvider.Movies.CONTENT_URI,values);
         long moviesRowId = ContentUris.parseId(uri);
 
         // Verify we got a row back.
@@ -59,7 +59,7 @@ public class TestProvider extends AndroidTestCase {
         Log.i(LOG_TAG, "New row id: " + moviesRowId);
 
         Cursor cursor = mContext.getContentResolver().query(
-                com.example.guillermo.popularmovies.database.PopularMoviesProvider.Movies.MOVIES_URI,
+                com.example.guillermo.popularmovies.database.PopularMoviesProvider.Movies.CONTENT_URI,
                 null,   // projection
                 MoviesColumnList._ID + " = " + moviesRowId,
                 null,   // Values for the "where" clause
