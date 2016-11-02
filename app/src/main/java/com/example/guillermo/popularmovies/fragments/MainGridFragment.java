@@ -1,13 +1,19 @@
 package com.example.guillermo.popularmovies.fragments;
 
-import android.app.Fragment;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.graphics.PorterDuff;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v4.view.MenuItemCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -25,17 +31,17 @@ import com.example.guillermo.popularmovies.MovieDetailActivity;
 import com.example.guillermo.popularmovies.R;
 import com.example.guillermo.popularmovies.adapters.GridAdapter;
 import com.example.guillermo.popularmovies.backgroundtasks.FetchPopularMoviesTask;
+import com.example.guillermo.popularmovies.database.PopularMoviesProvider;
 import com.example.guillermo.popularmovies.enums.SortingMethod;
 import com.example.guillermo.popularmovies.model.MovieItem;
 import com.example.guillermo.popularmovies.sync.MoviesSyncAdapter;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
  * Created by guillermo on 11/09/16.
  */
-public class MainGridFragment extends Fragment {
+public class MainGridFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private final String LOG_TAG = MainGridFragment.class.getSimpleName();
 
@@ -43,31 +49,25 @@ public class MainGridFragment extends Fragment {
     private List<String> mostRatedMoviesList;
     */
     private FetchPopularMoviesTask backgroundTask;
-    private ArrayAdapter<MovieItem> adapter;
+    private GridAdapter adapter;
     private ArrayAdapter<String> sortingAdapter;
     private String options[] = {"Most Popular","Most Rated"};
     private int option=0;
+
+    private static final int LOADER_ID = 0;
+
+    public MainGridFragment() {
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
 
-        adapter = new GridAdapter(getActivity(),R.layout.main_grid_fragment,new ArrayList<MovieItem>());
+        //adapter = new GridAdapter(getActivity(),R.layout.main_grid_fragment,new ArrayList<MovieItem>());
+        adapter = new GridAdapter(getActivity(),null,0);
         sortingAdapter = new ArrayAdapter <String> (getActivity(),R.layout.spinner_item,R.id.spinner_texview_id, Arrays.asList(options));
         setHasOptionsMenu(true);
         super.onCreate(savedInstanceState);
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-    }
-
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        //MoviesSyncAdapter.syncImmediately(getActivity());
     }
 
     @Override
@@ -136,5 +136,37 @@ public class MainGridFragment extends Fragment {
         ConnectivityManager cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
         return netInfo != null && netInfo.isConnectedOrConnecting();
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        getLoaderManager().initLoader(LOADER_ID,null,this);
+        super.onActivityCreated(savedInstanceState);
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        Uri movieUri = PopularMoviesProvider.Movies.MOVIES_URI;
+        Log.i(LOG_TAG,"************ onCreateLoader  **********");
+        Log.i(LOG_TAG," URI = "+ movieUri.toString());
+        return new CursorLoader(getActivity(),
+                movieUri,
+                null,
+                null,
+                null,
+                null);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        Log.i(LOG_TAG,"******* LOAD FINISHED *******************");
+        if (data.moveToFirst()){
+            Log.i(LOG_TAG,"******* DATA FROM DATABASE = path "+data.getString(2));
+        }
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+
     }
 }
