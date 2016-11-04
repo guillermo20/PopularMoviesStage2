@@ -100,6 +100,7 @@ public class MoviesSyncAdapter extends AbstractThreadedSyncAdapter {
                 movieContentValues.put(MoviesColumnList.RELEASE_DATE,movieItem.getReleaseDate());
                 movieContentValues.put(MoviesColumnList.POSTERPATH,movieItem.getPosterPath());
                 movieContentValues.put(MoviesColumnList.OVERVIEW,movieItem.getOverview());
+                movieContentValues.put(MoviesColumnList.SORT_TYPE,sortingParam);
                 moviecontentlist.add(movieContentValues);
             }
             if(!moviecontentlist.isEmpty()){

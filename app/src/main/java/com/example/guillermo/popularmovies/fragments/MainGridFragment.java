@@ -31,6 +31,7 @@ import com.example.guillermo.popularmovies.MovieDetailActivity;
 import com.example.guillermo.popularmovies.R;
 import com.example.guillermo.popularmovies.adapters.GridAdapter;
 import com.example.guillermo.popularmovies.backgroundtasks.FetchPopularMoviesTask;
+import com.example.guillermo.popularmovies.database.MoviesColumnList;
 import com.example.guillermo.popularmovies.database.PopularMoviesProvider;
 import com.example.guillermo.popularmovies.enums.SortingMethod;
 import com.example.guillermo.popularmovies.model.MovieItem;
@@ -115,11 +116,13 @@ public class MainGridFragment extends Fragment implements LoaderManager.LoaderCa
                         editor.putString(SortingMethod.class.getSimpleName().toLowerCase(),SortingMethod.POPULAR_MOVIES_SORT.getCode());
                         editor.commit();
                         MoviesSyncAdapter.syncImmediately(getActivity());
+                        restartLoader();
                         break;
                     case 1:
                         editor.putString(SortingMethod.class.getSimpleName().toLowerCase(),SortingMethod.TOP_RATED_MOVIES_SORT.getCode());
                         editor.commit();
                         MoviesSyncAdapter.syncImmediately(getActivity());
+                        restartLoader();
                         break;
                 }
             }
@@ -130,6 +133,10 @@ public class MainGridFragment extends Fragment implements LoaderManager.LoaderCa
             }
         });
         super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    private void restartLoader(){
+        getLoaderManager().restartLoader(LOADER_ID,null,this);
     }
 
     public boolean isNetworkConectivityOnline() {
@@ -147,29 +154,33 @@ public class MainGridFragment extends Fragment implements LoaderManager.LoaderCa
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         Uri movieUri = PopularMoviesProvider.Movies.CONTENT_URI;
-        Log.i(LOG_TAG,"************ onCreateLoader  **********");
+        Log.i(LOG_TAG,"************ START - onCreateLoader  **********");
         Log.i(LOG_TAG," URI = "+ movieUri.toString());
+        SharedPreferences prefs = getActivity().getSharedPreferences(SortingMethod.class.getSimpleName().toLowerCase(),Context.MODE_PRIVATE);
+        String selection = MoviesColumnList.SORT_TYPE + "=?";
+        String[] selectionArgs = { String.valueOf(prefs.getString(SortingMethod.class.getSimpleName().toLowerCase(),SortingMethod.POPULAR_MOVIES_SORT.getCode()))};
+        Log.i(LOG_TAG,"************ onCreateLoader  ********** selection = "+selection+ "  ******** selectionArgs "+selectionArgs[0]);
+        Log.i(LOG_TAG,"************ END - onCreateLoader  **********");
         return new CursorLoader(getActivity(),
                 movieUri,
                 null,
-                null,
-                null,
+                selection,
+                selectionArgs,
                 null);
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        Log.i(LOG_TAG,"******* LOAD FINISHED *******************");
+        Log.i(LOG_TAG,"******* LOADER FINISHED *******************");
         if (data.moveToFirst()){
             do {
                 Log.i(LOG_TAG,"******* DATA FROM DATABASE - Title ["+data.getString(2)+"]");
             }while (data.moveToNext());
         }
-
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-
+        Log.i(LOG_TAG,"******* LOADER RESET *******************");
     }
 }
