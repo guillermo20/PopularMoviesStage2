@@ -1,8 +1,7 @@
 package com.example.guillermo.popularmovies.database;
 
-import net.simonvt.schematic.annotation.AutoIncrement;
+import net.simonvt.schematic.annotation.ConflictResolutionType;
 import net.simonvt.schematic.annotation.DataType;
-import net.simonvt.schematic.annotation.NotNull;
 import net.simonvt.schematic.annotation.PrimaryKey;
 import net.simonvt.schematic.annotation.References;
 
@@ -12,26 +11,26 @@ import net.simonvt.schematic.annotation.References;
 
 public interface TrailersColumnList {
 
-    @DataType(DataType.Type.INTEGER) @PrimaryKey
-    @AutoIncrement
-    String _ID = "_id";
+    @DataType(DataType.Type.TEXT) @PrimaryKey(onConflict = ConflictResolutionType.REPLACE)
+    //@AutoIncrement
+    String _ID = "trailer_id";
 
-    @DataType(DataType.Type.TEXT) @NotNull
+    @DataType(DataType.Type.TEXT)
     String VIDEO_ID = "video_id";
 
-    @DataType(DataType.Type.TEXT) @NotNull
+    @DataType(DataType.Type.TEXT)
     String KEY = "key";
 
-    @DataType(DataType.Type.TEXT) @NotNull
+    @DataType(DataType.Type.TEXT)
     String NAME = "name";
 
-    @DataType(DataType.Type.TEXT) @NotNull
+    @DataType(DataType.Type.TEXT)
     String SITE = "site";
 
-    @DataType(DataType.Type.TEXT) @NotNull
+    @DataType(DataType.Type.TEXT)
     String SIZE = "size";
 
-    @DataType(DataType.Type.TEXT) @NotNull
+    @DataType(DataType.Type.TEXT)
     String TYPE = "type";
 
     @DataType(DataType.Type.TEXT) @References(table = PopularMoviesDataBase.MOVIES , column = MoviesColumnList.MOVIE_ID)

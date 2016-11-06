@@ -13,6 +13,8 @@ import java.io.Serializable;
 
 public class ReviewMovieInfo implements Serializable {
 
+    private String movieId;
+
     private String reviewId;
 
     private String author;
@@ -46,5 +48,21 @@ public class ReviewMovieInfo implements Serializable {
 
     public String getContent() {
         return content;
+    }
+
+    public String getMovieId() {
+        return movieId;
+    }
+
+    public String getReviewId() {
+        return reviewId;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public String getUrl() {
+        return url;
     }
 }

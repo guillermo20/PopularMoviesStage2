@@ -13,6 +13,8 @@ import java.io.Serializable;
 
 public class VideoMovieInfo implements Serializable {
 
+    private String movieId;
+
     private String videoId;
 
     private String key;
@@ -73,5 +75,9 @@ public class VideoMovieInfo implements Serializable {
             Log.e("VideoMovieInfo",e.getMessage());
         }
         return null;
+    }
+
+    public String getMovieId() {
+        return movieId;
     }
 }
