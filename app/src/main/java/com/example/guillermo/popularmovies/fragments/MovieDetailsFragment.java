@@ -1,20 +1,26 @@
 package com.example.guillermo.popularmovies.fragments;
 
-import android.app.Fragment;
+
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.guillermo.popularmovies.R;
+import com.example.guillermo.popularmovies.database.PopularMoviesProvider;
+import com.example.guillermo.popularmovies.database.TrailersColumnList;
 import com.example.guillermo.popularmovies.model.MovieItem;
 import com.example.guillermo.popularmovies.model.ReviewMovieInfo;
 import com.squareup.picasso.Picasso;
@@ -26,13 +32,15 @@ import java.util.List;
 /**
  * Created by guillermo on 17/09/16.
  */
-public class MovieDetailsFragment extends Fragment {
+public class MovieDetailsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private final String LOG_TAG=MovieDetailsFragment.class.getSimpleName();
 
     private MovieItem movieItem;
 
     ArrayAdapter<String> reviewAdapter;
+
+    private int TRAILERS_LOADER_ID = 1;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -93,5 +101,41 @@ public class MovieDetailsFragment extends Fragment {
             return result;
         }
         return null;
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        getLoaderManager().initLoader(TRAILERS_LOADER_ID,null,this);
+        super.onActivityCreated(savedInstanceState);
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        Uri contentUri = PopularMoviesProvider.Trailers.CONTENT_URI;
+        String selection = TrailersColumnList.MOVIE_ID + "=?";
+        String[] selectionArgs = { String.valueOf(movieItem.getMovieId())};
+        CursorLoader dataCursor = new CursorLoader(getActivity(),
+                contentUri,
+                null,
+                selection,
+                selectionArgs,
+                null);
+        return dataCursor;
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        Log.i(LOG_TAG,"*************** init onLoadFinished *********** ");
+        if (data.moveToFirst()){
+            do {
+                Log.i(LOG_TAG," data = "+data.getString(2));
+            }while (data.moveToNext());
+        }
+        Log.i(LOG_TAG,"*************** end  onLoadFinished *********** ");
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        Log.i(LOG_TAG,"************** onLoaderReset   ***********");
     }
 }
