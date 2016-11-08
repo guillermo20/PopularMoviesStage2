@@ -172,6 +172,7 @@ public class MainGridFragment extends Fragment implements LoaderManager.LoaderCa
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         Log.i(LOG_TAG,"******* onLoadFinished *******************");
+        adapter.swapCursor(data);
         if (data.moveToFirst()){
             do {
                 Log.i(LOG_TAG,"******* DATA FROM DATABASE - Title ["+data.getString(2)+"]");
@@ -181,6 +182,7 @@ public class MainGridFragment extends Fragment implements LoaderManager.LoaderCa
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
+        adapter.swapCursor(null);
         Log.i(LOG_TAG,"******* onLoaderReset *******************");
     }
 }
