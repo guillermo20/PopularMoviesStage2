@@ -111,6 +111,12 @@ public class MovieItem implements Serializable{
         return uri;
     }
 
+
+    public static Uri getPosterUri(String posterSize,String posterPath){
+        Uri uri = Uri.parse("http://image.tmdb.org/t/p/"+posterSize+"/"+posterPath).buildUpon().build();
+        return uri;
+    }
+
     public Uri getBackdropUri(String posterSize){
         Uri uri = Uri.parse("http://image.tmdb.org/t/p/"+posterSize+"/"+backdropPath).buildUpon().build();
         return  uri;

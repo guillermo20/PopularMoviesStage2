@@ -2,14 +2,15 @@ package com.example.guillermo.popularmovies.adapters;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CursorAdapter;
 import android.widget.ImageView;
 
 import com.example.guillermo.popularmovies.R;
+import com.example.guillermo.popularmovies.enums.MovieTableProjection;
+import com.example.guillermo.popularmovies.model.MovieItem;
+import com.squareup.picasso.Picasso;
 
 /**
  * Created by guillermo on 11/09/16.
@@ -50,16 +51,23 @@ public class GridAdapter extends CursorAdapter {
 
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
-        View view = LayoutInflater.from(context).inflate(R.layout.main_grid_fragment, parent, false);
-        return view;
+        //View view = LayoutInflater.from(context).inflate(R.layout.main_grid_fragment, parent, false);
+        ImageView imageView = new ImageView(context);
+        //Log.i(LOG_TAG,"**** posterpath = "+ MovieItem.getPosterUri(MovieItem.IMAGE_SIZE_W185,cursor.getString(MovieTableProjection.POSTERPATH.getCode())));
+        Picasso.with(context)
+                .load(MovieItem.getPosterUri(MovieItem.IMAGE_SIZE_W185,cursor.getString(MovieTableProjection.POSTERPATH.getCode())))
+                .resize(400,540).centerInside()
+                .error(R.drawable.error)
+                .into(imageView);
+        return imageView;
     }
 
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
-        ImageView imageView = new ImageView(context);
-        Log.i(LOG_TAG,"**** field = "+cursor.getString(2));
+        /*ImageView imageView = new ImageView(context);
+        Log.i(LOG_TAG,"**** posterpath = "+ MovieItem.getPosterUri(MovieItem.IMAGE_SIZE_W185,cursor.getString(MovieTableProjection.POSTERPATH.getCode())));
         /*Picasso.with(context)
-                .load(movieItem.getPosterUri(MovieItem.IMAGE_SIZE_W185))
+                .load(MovieItem.getPosterUri(MovieItem.IMAGE_SIZE_W185,cursor.getString(MovieTableProjection.POSTERPATH.getCode())))
                 .resize(400,540).centerInside()
                 .error(R.drawable.error)
                 .into(imageView);*/
