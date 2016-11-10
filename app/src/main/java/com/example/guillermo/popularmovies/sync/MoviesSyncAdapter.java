@@ -30,6 +30,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -53,7 +54,6 @@ public class MoviesSyncAdapter extends AbstractThreadedSyncAdapter {
 
     public static final String POPULAR_MOVIES = "popular";
     public static final String TOP_RATED_MOVIES = "top_rated";
-    //private List<MovieItem> listMovieItem;
 
     private String sortingParam;
 
@@ -81,7 +81,6 @@ public class MoviesSyncAdapter extends AbstractThreadedSyncAdapter {
                 MovieItem movieItem = MovieItem.toMovieItemFromJson(results[i]);
                 String[] queryResults=queryVideoInfo(movieItem);
                 List<VideoMovieInfo> listOfVideos = new ArrayList<>();
-                videoContentList = new ArrayList<>();
                 if(queryResults!=null){
                     for (int j = 0; j<queryResults.length;j++){
                         VideoMovieInfo videoItem =VideoMovieInfo.toVideoMovieInfoFromJson(queryResults[j]);
@@ -97,7 +96,6 @@ public class MoviesSyncAdapter extends AbstractThreadedSyncAdapter {
                     movieItem.setVideos(listOfVideos);
                 }
                 List<ReviewMovieInfo> reviewMovieInfoResults = new ArrayList<>();
-                reviewcontentList = new ArrayList<>();
                 queryResults = queryReviewInfo(movieItem);
                 if(queryResults!=null){
                     for (int j = 0; j<queryResults.length;j++){
@@ -113,6 +111,7 @@ public class MoviesSyncAdapter extends AbstractThreadedSyncAdapter {
                     }
                     movieItem.setReviews(reviewMovieInfoResults);
                 }
+                byte[] posterImage = queryMoviePoster(movieItem);
                 listMovieItem.add(movieItem);
                 ContentValues movieContentValues = new ContentValues();
                 movieContentValues.put(MoviesColumnList.MOVIE_ID,movieItem.getMovieId());
@@ -122,23 +121,21 @@ public class MoviesSyncAdapter extends AbstractThreadedSyncAdapter {
                 movieContentValues.put(MoviesColumnList.POSTERPATH,movieItem.getPosterPath());
                 movieContentValues.put(MoviesColumnList.OVERVIEW,movieItem.getOverview());
                 movieContentValues.put(MoviesColumnList.SORT_TYPE,sortingParam);
+                movieContentValues.put(MoviesColumnList.POSTER_IMAGE,posterImage);
+                moviecontentlist.add(movieContentValues);
                 context.getContentResolver().insert(PopularMoviesProvider.Movies.CONTENT_URI,movieContentValues);
-                if (!reviewcontentList.isEmpty()){
-                    ContentValues[] contentArray = new ContentValues[reviewcontentList.size()];
-                    reviewcontentList.toArray(contentArray);
-                    context.getContentResolver().bulkInsert(PopularMoviesProvider.Reviews.CONTENT_URI,contentArray);
-                }
-                if (!videoContentList.isEmpty()){
-                    ContentValues[] contentArray = new ContentValues[videoContentList.size()];
-                    videoContentList.toArray(contentArray);
-                    context.getContentResolver().bulkInsert(PopularMoviesProvider.Trailers.CONTENT_URI,contentArray);
-                }
+
             }
-            /*if(!moviecontentlist.isEmpty()){
-                ContentValues[] movieContentArray = new ContentValues[moviecontentlist.size()];
-                moviecontentlist.toArray(movieContentArray);
-                context.getContentResolver().bulkInsert(PopularMoviesProvider.Movies.CONTENT_URI,movieContentArray);
-            }*/
+            if (!reviewcontentList.isEmpty()){
+                ContentValues[] contentArray = new ContentValues[reviewcontentList.size()];
+                reviewcontentList.toArray(contentArray);
+                context.getContentResolver().bulkInsert(PopularMoviesProvider.Reviews.CONTENT_URI,contentArray);
+            }
+            if (!videoContentList.isEmpty()){
+                ContentValues[] contentArray = new ContentValues[videoContentList.size()];
+                videoContentList.toArray(contentArray);
+                context.getContentResolver().bulkInsert(PopularMoviesProvider.Trailers.CONTENT_URI,contentArray);
+            }
         }
     }
 
@@ -302,7 +299,7 @@ public class MoviesSyncAdapter extends AbstractThreadedSyncAdapter {
             }
 
             forecastJsonStr = buffer.toString();
-            Log.v("ForecastFragment", " trailers json string: " + forecastJsonStr);
+            //Log.v("ForecastFragment", " trailers json string: " + forecastJsonStr);
 
         } catch (Exception e) {
             Log.e(LOG_TAG, e.getMessage());
@@ -350,7 +347,7 @@ public class MoviesSyncAdapter extends AbstractThreadedSyncAdapter {
             }
 
             forecastJsonStr = buffer.toString();
-            Log.v("ForecastFragment", " review json string: " + forecastJsonStr);
+            //Log.v("ForecastFragment", " review json string: " + forecastJsonStr);
 
         } catch (Exception e) {
             Log.e(LOG_TAG, e.getMessage());
@@ -358,4 +355,24 @@ public class MoviesSyncAdapter extends AbstractThreadedSyncAdapter {
         return getListFromJson(forecastJsonStr);
     }
 
+
+    private byte[] queryMoviePoster(MovieItem item){
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        byte[] result = null;
+        try {
+            URL url = new URL(item.getPosterUri(MovieItem.IMAGE_SIZE_W342).toString());
+            InputStream inputStream = url.openStream();
+            byte[] b = new byte[4096];
+            int length;
+            while ((length = inputStream.read(b)) != -1) {
+                outputStream.write(b, 0, length);
+            }
+            result = outputStream.toByteArray();
+            inputStream.close();
+            outputStream.close();
+        }catch (Exception e){
+            Log.e(LOG_TAG,e.getMessage());
+        }
+        return result;
+    }
 }

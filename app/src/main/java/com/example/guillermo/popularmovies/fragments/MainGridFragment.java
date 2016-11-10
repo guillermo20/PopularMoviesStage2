@@ -46,9 +46,6 @@ public class MainGridFragment extends Fragment implements LoaderManager.LoaderCa
 
     private final String LOG_TAG = MainGridFragment.class.getSimpleName();
 
-    /*private List<String> popularMoviesList;
-    private List<String> mostRatedMoviesList;
-    */
     private FetchPopularMoviesTask backgroundTask;
     private GridAdapter adapter;
     private ArrayAdapter<String> sortingAdapter;
@@ -63,8 +60,6 @@ public class MainGridFragment extends Fragment implements LoaderManager.LoaderCa
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
-
-        //adapter = new GridAdapter(getActivity(),R.layout.main_grid_fragment,new ArrayList<MovieItem>());
         adapter = new GridAdapter(getActivity(),null,0);
         sortingAdapter = new ArrayAdapter <String> (getActivity(),R.layout.spinner_item,R.id.spinner_texview_id, Arrays.asList(options));
         setHasOptionsMenu(true);
@@ -99,17 +94,6 @@ public class MainGridFragment extends Fragment implements LoaderManager.LoaderCa
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Log.v(LOG_TAG,"clicked on item from spinner");
-
-                /*option=position;
-                backgroundTask = new FetchPopularMoviesTask(getActivity(),adapter);
-                switch (position){
-                    case 0:
-                        backgroundTask.execute(FetchPopularMoviesTask.POPULAR_MOVIES);
-                        break;
-                    case 1:
-                        backgroundTask.execute(FetchPopularMoviesTask.TOP_RATED_MOVIES);
-                        break;
-                }*/
                 SharedPreferences.Editor editor = getActivity().getSharedPreferences(SortingMethod.class.getSimpleName().toLowerCase(),Context.MODE_PRIVATE).edit();
                 switch (position){
                     case 0:
@@ -154,13 +138,9 @@ public class MainGridFragment extends Fragment implements LoaderManager.LoaderCa
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         Uri movieUri = PopularMoviesProvider.Movies.CONTENT_URI;
-        Log.i(LOG_TAG,"************ START - onCreateLoader  **********");
-        Log.i(LOG_TAG," URI = "+ movieUri.toString());
         SharedPreferences prefs = getActivity().getSharedPreferences(SortingMethod.class.getSimpleName().toLowerCase(),Context.MODE_PRIVATE);
         String selection = MoviesColumnList.SORT_TYPE + "=?";
         String[] selectionArgs = { String.valueOf(prefs.getString(SortingMethod.class.getSimpleName().toLowerCase(),SortingMethod.POPULAR_MOVIES_SORT.getCode()))};
-        Log.i(LOG_TAG,"************ onCreateLoader  ********** selection = "+selection+ "  ******** selectionArgs "+selectionArgs[0]);
-        Log.i(LOG_TAG,"************ END - onCreateLoader  **********");
         return new CursorLoader(getActivity(),
                 movieUri,
                 null,
@@ -171,18 +151,11 @@ public class MainGridFragment extends Fragment implements LoaderManager.LoaderCa
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        Log.i(LOG_TAG,"******* onLoadFinished *******************");
         adapter.swapCursor(data);
-        if (data.moveToFirst()){
-            do {
-                Log.i(LOG_TAG,"******* DATA FROM DATABASE - Title ["+data.getString(2)+"]");
-            }while (data.moveToNext());
-        }
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         adapter.swapCursor(null);
-        Log.i(LOG_TAG,"******* onLoaderReset *******************");
     }
 }

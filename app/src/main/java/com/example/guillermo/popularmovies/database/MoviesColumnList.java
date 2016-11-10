@@ -3,6 +3,7 @@ package com.example.guillermo.popularmovies.database;
 import net.simonvt.schematic.annotation.AutoIncrement;
 import net.simonvt.schematic.annotation.ConflictResolutionType;
 import net.simonvt.schematic.annotation.DataType;
+import net.simonvt.schematic.annotation.Database;
 import net.simonvt.schematic.annotation.DefaultValue;
 import net.simonvt.schematic.annotation.PrimaryKey;
 import net.simonvt.schematic.annotation.Unique;
@@ -63,5 +64,11 @@ public interface MoviesColumnList {
 
     @DataType(DataType.Type.TEXT)
     String SORT_TYPE = "sort_type";
+
+    @DataType(DataType.Type.BLOB)
+    String POSTER_IMAGE = "poster_image";
+
+    @DataType(DataType.Type.BLOB)
+    String THUMBNAIL_IMAGE = "thumbnail_image";
 
 }
