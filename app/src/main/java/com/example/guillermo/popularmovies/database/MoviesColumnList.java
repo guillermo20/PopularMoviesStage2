@@ -68,7 +68,4 @@ public interface MoviesColumnList {
     @DataType(DataType.Type.BLOB)
     String POSTER_IMAGE = "poster_image";
 
-    @DataType(DataType.Type.BLOB)
-    String THUMBNAIL_IMAGE = "thumbnail_image";
-
 }
