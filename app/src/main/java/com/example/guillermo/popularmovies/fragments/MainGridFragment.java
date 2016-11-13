@@ -2,7 +2,6 @@ package com.example.guillermo.popularmovies.fragments;
 
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.PorterDuff;
@@ -27,14 +26,12 @@ import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.Spinner;
 
-import com.example.guillermo.popularmovies.MovieDetailActivity;
 import com.example.guillermo.popularmovies.R;
 import com.example.guillermo.popularmovies.adapters.GridAdapter;
 import com.example.guillermo.popularmovies.backgroundtasks.FetchPopularMoviesTask;
 import com.example.guillermo.popularmovies.database.MoviesColumnList;
 import com.example.guillermo.popularmovies.database.PopularMoviesProvider;
 import com.example.guillermo.popularmovies.enums.SortingMethod;
-import com.example.guillermo.popularmovies.model.MovieItem;
 import com.example.guillermo.popularmovies.sync.MoviesSyncAdapter;
 
 import java.util.Arrays;
@@ -68,15 +65,16 @@ public class MainGridFragment extends Fragment implements LoaderManager.LoaderCa
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Log.v(LOG_TAG, "maingrid oncreateview");
         View root = inflater.inflate(R.layout.main_grid_fragment, container, false);
         GridView gridView = (GridView) root.findViewById(R.id.main_grid_fragment_id);
         gridView.setAdapter(adapter);
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                MovieItem item = (MovieItem) parent.getItemAtPosition(position);
-                startActivity(new Intent(getActivity(),MovieDetailActivity.class).putExtra(MovieItem.class.getSimpleName(),item));
+                Log.i(LOG_TAG, " item clicked position = "+position);
+                //MovieItem item = (MovieItem) parent.getItemAtPosition(position);
+                //TODO: find a way to pass a content uri, or a movieItem when the user clicks on a poster
+                //startActivity(new Intent(getActivity(),MovieDetailActivity.class).putExtra(MovieItem.class.getSimpleName(),item));
             }
         });
         return root;
