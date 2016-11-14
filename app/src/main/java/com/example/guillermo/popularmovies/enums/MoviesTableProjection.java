@@ -6,7 +6,7 @@ import java.security.InvalidParameterException;
  * Created by guillermo on 11/7/16.
  */
 
-public enum MovieTableProjection {
+public enum MoviesTableProjection {
     _ID(0),
     MOVIE_ID(1),
     TITLE(2),
@@ -28,12 +28,12 @@ public enum MovieTableProjection {
 
     private int code;
 
-    MovieTableProjection(int code){
+    MoviesTableProjection(int code){
         this.code = code;
     }
-    public static MovieTableProjection getByCode(int code) throws InvalidParameterException {
+    public static MoviesTableProjection getByCode(int code) throws InvalidParameterException {
 
-        for (MovieTableProjection vault : MovieTableProjection.values()) {
+        for (MoviesTableProjection vault : MoviesTableProjection.values()) {
             if (vault.getCode() == code)
                 return vault;
         }

@@ -9,7 +9,7 @@ import android.widget.CursorAdapter;
 import android.widget.ImageView;
 
 import com.example.guillermo.popularmovies.R;
-import com.example.guillermo.popularmovies.enums.MovieTableProjection;
+import com.example.guillermo.popularmovies.enums.MoviesTableProjection;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
@@ -39,9 +39,9 @@ public class GridAdapter extends CursorAdapter {
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
         ImageView imageView = (ImageView) view;
-        byte[] result = cursor.getBlob(MovieTableProjection.POSTER_IMAGE.getCode());
+        byte[] result = cursor.getBlob(MoviesTableProjection.POSTER_IMAGE.getCode());
         FileOutputStream stream = null;
-        String nameFile = cursor.getString(MovieTableProjection.POSTERPATH.getCode()).replace("/","");
+        String nameFile = cursor.getString(MoviesTableProjection.POSTERPATH.getCode()).replace("/","");
         try {
             stream = context.openFileOutput(nameFile,Context.MODE_PRIVATE);
             stream.write(result);

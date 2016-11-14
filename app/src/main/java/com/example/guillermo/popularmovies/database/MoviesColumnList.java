@@ -20,7 +20,7 @@ public interface MoviesColumnList {
     @AutoIncrement
     String _ID = "_id";
 
-    @DataType(DataType.Type.TEXT) @Unique(onConflict = ConflictResolutionType.REPLACE)
+    @DataType(DataType.Type.TEXT) @Unique(onConflict = ConflictResolutionType.IGNORE)
     String MOVIE_ID = "movie_id";
 
     @DataType(DataType.Type.TEXT)
