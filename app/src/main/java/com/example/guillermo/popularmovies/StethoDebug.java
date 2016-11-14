@@ -19,21 +19,4 @@ public class StethoDebug extends Application {
                 .enableWebKitInspector(Stetho.defaultInspectorModulesProvider(this))
                 .build());
     }
-    /*private class PluginsProvider implements DumperPluginsProvider {
-
-        private Context mContext;
-
-        public PluginsProvider(Context mContext) {
-            this.mContext = mContext;
-        }
-
-        @Override
-        public Iterable<DumperPlugin> get() {
-            List<DumperPlugin> plugins = new ArrayList<>();
-            for (DumperPlugin defaultPlugin:Stetho.defaultDumperPluginsProvider(mContext).get()) {
-                plugins.add(defaultPlugin);
-            }
-            return plugins;
-        }
-    }*/
 }
