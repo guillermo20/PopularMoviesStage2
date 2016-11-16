@@ -14,7 +14,7 @@ public class MovieDetailActivity extends AppCompatActivity {
         if (savedInstanceState == null){
 
             Bundle arguments = new Bundle();
-            arguments.putParcelable(MovieDetailsFragment.DETAIL_URI, getIntent().getData());
+            arguments.putParcelable(MovieDetailsFragment.TRAILER_URI, getIntent().getData());
 
             MovieDetailsFragment fragment = new MovieDetailsFragment();
             fragment.setArguments(arguments);

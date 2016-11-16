@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.example.guillermo.popularmovies.R;
 import com.example.guillermo.popularmovies.enums.TrailersTableProjection;
+import com.example.guillermo.popularmovies.loaders.ReviewsLoader;
 import com.example.guillermo.popularmovies.model.MovieItem;
 import com.example.guillermo.popularmovies.model.ReviewMovieInfo;
 import com.squareup.picasso.Picasso;
@@ -35,13 +36,21 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
 
     private Uri mUri;
 
-    public static final String DETAIL_URI = "URI";
+    private Uri mUriReviews;
+
+    public static final String TRAILER_URI = "TRAILER_URI";
+
+    public static final String REVIEW_URI = "REVIEW_URI";
 
     private int TRAILERS_LOADER_ID = 1;
+
+    private int REVIEW_LOADER_ID = 2;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         mMovieItem = (MovieItem) getActivity().getIntent().getSerializableExtra("movieItem");
+        //TODO: use this field to call the reviews loader...
+        mUriReviews = getActivity().getIntent().getParcelableExtra(MovieDetailsFragment.REVIEW_URI);
         super.onCreate(savedInstanceState);
     }
 
@@ -49,7 +58,7 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Bundle arguments = getArguments();
         if (arguments != null) {
-            mUri = arguments.getParcelable(this.DETAIL_URI);
+            mUri = arguments.getParcelable(this.TRAILER_URI);
             Log.i(LOG_TAG,"************** Uri passed = "+mUri+" ************");
 
         }
@@ -110,6 +119,7 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         getLoaderManager().initLoader(TRAILERS_LOADER_ID,null,this);
+        getLoaderManager().initLoader(REVIEW_LOADER_ID,null,new ReviewsLoader());
         super.onActivityCreated(savedInstanceState);
     }
 
