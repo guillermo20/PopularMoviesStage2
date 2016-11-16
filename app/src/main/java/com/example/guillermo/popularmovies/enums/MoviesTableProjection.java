@@ -22,9 +22,11 @@ public enum MoviesTableProjection {
     VIDEO(12),
     VOTE_AVERAGE(13),
     FAVORITE_FLAG(14),
-    SORT_TYPE(15),
-    POSTER_IMAGE(16),
-    THUMBNAIL_IMAGE(17);
+    SORT_TYPE_POPULAR(15),
+    SORT_TYPE_RATED(16),
+    SORT_TYPE_FAVORITES(17),
+    POSTER_IMAGE(18),
+    THUMBNAIL_IMAGE(19);
 
     private int code;
 

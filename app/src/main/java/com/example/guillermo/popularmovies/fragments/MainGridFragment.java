@@ -35,6 +35,7 @@ import com.example.guillermo.popularmovies.database.MoviesColumnList;
 import com.example.guillermo.popularmovies.database.PopularMoviesProvider;
 import com.example.guillermo.popularmovies.enums.MoviesTableProjection;
 import com.example.guillermo.popularmovies.enums.SortingMethod;
+import com.example.guillermo.popularmovies.model.MovieItem;
 import com.example.guillermo.popularmovies.sync.MoviesSyncAdapter;
 
 import java.util.Arrays;
@@ -67,7 +68,7 @@ public class MainGridFragment extends Fragment implements LoaderManager.LoaderCa
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.main_grid_fragment, container, false);
         GridView gridView = (GridView) root.findViewById(R.id.main_grid_fragment_id);
         gridView.setAdapter(adapter);
@@ -75,12 +76,13 @@ public class MainGridFragment extends Fragment implements LoaderManager.LoaderCa
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Log.i(LOG_TAG, " item clicked position = "+position);
-                //MovieItem item = (MovieItem) parent.getItemAtPosition(position);
-                //TODO: find a way to pass a content uri, or a movieItem when the user clicks on a poster
-                //startActivity(new Intent(getActivity(),MovieDetailActivity.class).putExtra(MovieItem.class.getSimpleName(),item));
                 Cursor cursor = (Cursor) parent.getItemAtPosition(position);
                 Uri contentUri = PopularMoviesProvider.Trailers.withId(cursor.getLong(MoviesTableProjection.MOVIE_ID.getCode()));
-                startActivity(new Intent(getActivity(),MovieDetailActivity.class).setData(contentUri));
+                MovieItem item = makeMovieItem(cursor);
+                Intent intent = new Intent(getActivity(),MovieDetailActivity.class);
+                intent.setData(contentUri);
+                intent.putExtra("movieItem",item);
+                startActivity(intent);
             }
         });
         return root;
@@ -143,8 +145,15 @@ public class MainGridFragment extends Fragment implements LoaderManager.LoaderCa
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         Uri movieUri = PopularMoviesProvider.Movies.CONTENT_URI;
         SharedPreferences prefs = getActivity().getSharedPreferences(SortingMethod.class.getSimpleName().toLowerCase(),Context.MODE_PRIVATE);
-        String selection = MoviesColumnList.SORT_TYPE + "=?";
-        String[] selectionArgs = { String.valueOf(prefs.getString(SortingMethod.class.getSimpleName().toLowerCase(),SortingMethod.POPULAR_MOVIES_SORT.getCode()))};
+        String sortParam = prefs.getString(SortingMethod.class.getSimpleName().toLowerCase(),SortingMethod.POPULAR_MOVIES_SORT.getCode());
+        String selection= "";
+        switch (SortingMethod.getByCode(sortParam)){
+            case POPULAR_MOVIES_SORT: selection= MoviesColumnList.SORT_TYPE_POPULAR + "=?"; break;
+            case TOP_RATED_MOVIES_SORT: selection= MoviesColumnList.SORT_TYPE_RATED + "=?"; break;
+            case FAVORITES_MOVIES_SORT: selection= MoviesColumnList.SORT_TYPE_FAVORITES + "=?"; break;
+        }
+
+        String[] selectionArgs = { String.valueOf(sortParam)};
         return new CursorLoader(getActivity(),
                 movieUri,
                 null,
@@ -155,11 +164,32 @@ public class MainGridFragment extends Fragment implements LoaderManager.LoaderCa
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        //Log.i(LOG_TAG,"******* onLoadFinished called *********");
         adapter.swapCursor(data);
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
+        //Log.i(LOG_TAG,"******* onLoaderReset called *********");
         adapter.swapCursor(null);
+    }
+
+    private MovieItem makeMovieItem(Cursor cursor){
+        MovieItem item = new MovieItem(
+                cursor.getString(MoviesTableProjection.POSTERPATH.getCode()),
+                Boolean.getBoolean(cursor.getString(MoviesTableProjection.ADULT.getCode())),
+                cursor.getString(MoviesTableProjection.OVERVIEW.getCode()),
+                cursor.getString(MoviesTableProjection.RELEASE_DATE.getCode()),
+                cursor.getString(MoviesTableProjection.MOVIE_ID.getCode()),
+                cursor.getString(MoviesTableProjection.ORIGINAL_TITLE.getCode()),
+                cursor.getString(MoviesTableProjection.ORIGINAL_LANGUAGE.getCode()),
+                cursor.getString(MoviesTableProjection.TITLE.getCode()),
+                cursor.getString(MoviesTableProjection.BACKDROP_PATH.getCode()),
+                cursor.getDouble(MoviesTableProjection.POPULARITY.getCode()),
+                cursor.getLong(MoviesTableProjection.VOTE_COUNT.getCode()),
+                Boolean.getBoolean(cursor.getString(MoviesTableProjection.VIDEO.getCode())),
+                cursor.getDouble(MoviesTableProjection.VOTE_AVERAGE.getCode())
+        );
+        return item;
     }
 }

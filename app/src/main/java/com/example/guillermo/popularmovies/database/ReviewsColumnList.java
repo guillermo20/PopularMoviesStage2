@@ -10,7 +10,7 @@ import net.simonvt.schematic.annotation.References;
  */
 
 public interface ReviewsColumnList {
-    @DataType(DataType.Type.TEXT) @PrimaryKey(onConflict = ConflictResolutionType.REPLACE)
+    @DataType(DataType.Type.TEXT) @PrimaryKey(onConflict = ConflictResolutionType.IGNORE)
     String _ID = "review_id";
 
     @DataType(DataType.Type.TEXT)

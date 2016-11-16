@@ -11,7 +11,7 @@ import net.simonvt.schematic.annotation.References;
 
 public interface TrailersColumnList {
 
-    @DataType(DataType.Type.TEXT) @PrimaryKey(onConflict = ConflictResolutionType.REPLACE)
+    @DataType(DataType.Type.TEXT) @PrimaryKey(onConflict = ConflictResolutionType.IGNORE)
     //@AutoIncrement
     String _ID = "trailer_id";
 

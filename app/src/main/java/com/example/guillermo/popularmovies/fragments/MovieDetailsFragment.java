@@ -13,11 +13,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.guillermo.popularmovies.R;
 import com.example.guillermo.popularmovies.enums.TrailersTableProjection;
 import com.example.guillermo.popularmovies.model.MovieItem;
 import com.example.guillermo.popularmovies.model.ReviewMovieInfo;
+import com.squareup.picasso.Picasso;
 
 /**
  * Created by guillermo on 17/09/16.
@@ -26,7 +29,7 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
 
     private final String LOG_TAG=MovieDetailsFragment.class.getSimpleName();
 
-    private MovieItem movieItem;
+    private MovieItem mMovieItem;
 
     private ArrayAdapter<String> reviewAdapter;
 
@@ -38,6 +41,7 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        mMovieItem = (MovieItem) getActivity().getIntent().getSerializableExtra("movieItem");
         super.onCreate(savedInstanceState);
     }
 
@@ -47,20 +51,21 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
         if (arguments != null) {
             mUri = arguments.getParcelable(this.DETAIL_URI);
             Log.i(LOG_TAG,"************** Uri passed = "+mUri+" ************");
+
         }
 
 
         View rootView = inflater.inflate(R.layout.movie_details_fragment,container,false);
-//        TextView textViewTitle = (TextView) rootView.findViewById(R.id.movie_details_title);
-//        TextView textViewReleaseDate = (TextView) rootView.findViewById(R.id.movie_details_release_date);
-//        TextView textViewVoteAverage = (TextView) rootView.findViewById(R.id.movie_details_vote_avg);
-//        TextView textViewSynopsis = (TextView) rootView.findViewById(R.id.movie_details_synopsis);
-//        textViewTitle.setText("Title: "+movieItem.getTitle());
-//        textViewReleaseDate.setText("Release date: "+movieItem.getReleaseDate());
-//        textViewVoteAverage.setText("Vote: "+movieItem.getVoteAverage());
-//        textViewSynopsis.setText("Synopsis: "+movieItem.getOverview());
-//        ImageView imageView = (ImageView) rootView.findViewById(R.id.image_thumbnail);
-//        Picasso.with(getActivity()).load(movieItem.getBackdropUri(MovieItem.IMAGE_SIZE_W500)).error(R.drawable.error).into(imageView);
+        TextView textViewTitle = (TextView) rootView.findViewById(R.id.movie_details_title);
+        TextView textViewReleaseDate = (TextView) rootView.findViewById(R.id.movie_details_release_date);
+        TextView textViewVoteAverage = (TextView) rootView.findViewById(R.id.movie_details_vote_avg);
+        TextView textViewSynopsis = (TextView) rootView.findViewById(R.id.movie_details_synopsis);
+        textViewTitle.setText("Title: "+mMovieItem.getTitle());
+        textViewReleaseDate.setText("Release date: "+mMovieItem.getReleaseDate());
+        textViewVoteAverage.setText("Vote: "+mMovieItem.getVoteAverage());
+        textViewSynopsis.setText("Synopsis: "+mMovieItem.getOverview());
+        ImageView imageView = (ImageView) rootView.findViewById(R.id.image_thumbnail);
+        Picasso.with(getActivity()).load(mMovieItem.getBackdropUri(MovieItem.IMAGE_SIZE_W500)).error(R.drawable.error).into(imageView);
 //        ImageView videoImageView = (ImageView) rootView.findViewById(R.id.video_intent);
 //        if (!movieItem.getVideos().isEmpty()){
 //            Log.i(LOG_TAG,"the movie has videos!!");
@@ -110,9 +115,6 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-//        Uri contentUri = PopularMoviesProvider.Trailers.CONTENT_URI;
-//        String selection = TrailersColumnList.MOVIE_ID + "=?";
-//        String[] selectionArgs = { String.valueOf(movieItem.getMovieId())};
         CursorLoader dataCursor = new CursorLoader(getActivity(),
                 mUri,
                 null,
@@ -124,17 +126,17 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        Log.i(LOG_TAG,"*************** init onLoadFinished *********** ");
+        //Log.i(LOG_TAG,"*************** init onLoadFinished *********** ");
         if (data.moveToFirst()){
             do {
                 Log.i(LOG_TAG," data = "+data.getString(TrailersTableProjection.NAME.getCode())+ " key ="+data.getString(TrailersTableProjection.KEY.getCode()));
             }while (data.moveToNext());
         }
-        Log.i(LOG_TAG,"*************** end  onLoadFinished *********** ");
+        //Log.i(LOG_TAG,"*************** end  onLoadFinished *********** ");
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-        Log.i(LOG_TAG,"************** onLoaderReset   ***********");
+        //Log.i(LOG_TAG,"************** onLoaderReset   ***********");
     }
 }

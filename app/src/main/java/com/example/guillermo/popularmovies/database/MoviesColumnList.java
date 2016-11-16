@@ -20,7 +20,7 @@ public interface MoviesColumnList {
     @AutoIncrement
     String _ID = "_id";
 
-    @DataType(DataType.Type.TEXT) @Unique(onConflict = ConflictResolutionType.IGNORE)
+    @DataType(DataType.Type.TEXT) @Unique(onConflict = ConflictResolutionType.REPLACE)
     String MOVIE_ID = "movie_id";
 
     @DataType(DataType.Type.TEXT)
@@ -63,7 +63,14 @@ public interface MoviesColumnList {
     String FAVORITE_FLAG = "favorite_flag";
 
     @DataType(DataType.Type.TEXT)
-    String SORT_TYPE = "sort_type";
+    String SORT_TYPE_POPULAR = "sort_type_popular";
+
+    @DataType(DataType.Type.TEXT)
+    String SORT_TYPE_RATED = "sort_type_rated";
+
+    @DataType(DataType.Type.TEXT)
+    String SORT_TYPE_FAVORITES = "sort_type_favorites";
+
 
     @DataType(DataType.Type.BLOB)
     String POSTER_IMAGE = "poster_image";
