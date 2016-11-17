@@ -82,7 +82,6 @@ public class MainGridFragment extends Fragment implements LoaderManager.LoaderCa
                 MovieItem item = makeMovieItem(cursor);
                 Intent intent = new Intent(getActivity(),MovieDetailActivity.class);
                 intent.setData(trailerContentUri);
-                //TODO: find the contentUri of the trailers.
                 intent.putExtra(MovieDetailsFragment.REVIEW_URI,reviewContentUri);
                 intent.putExtra("movieItem",item);
                 startActivity(intent);
