@@ -44,6 +44,17 @@ public final class PopularMoviesProvider {
                 path = "reviews",
                 type = "vnd.android.cursor.dir/review")
         public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/reviews");
+
+        @InexactContentUri(
+                name = "REVIEW_ID",
+                path = "reviews" + "/#",
+                type = "vnd.android.cursor.dir/reviews",
+                whereColumn = TrailersColumnList.MOVIE_ID,
+                pathSegment = 1)
+        public static Uri withId(long id) {
+            return buildUri("reviews", String.valueOf(id));
+        }
+
     }
 
     @TableEndpoint(table = PopularMoviesDataBase.TRAILERS) public static class Trailers {

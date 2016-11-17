@@ -77,12 +77,13 @@ public class MainGridFragment extends Fragment implements LoaderManager.LoaderCa
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Log.i(LOG_TAG, " item clicked position = "+position);
                 Cursor cursor = (Cursor) parent.getItemAtPosition(position);
-                Uri contentUri = PopularMoviesProvider.Trailers.withId(cursor.getLong(MoviesTableProjection.MOVIE_ID.getCode()));
+                Uri trailerContentUri = PopularMoviesProvider.Trailers.withId(cursor.getLong(MoviesTableProjection.MOVIE_ID.getCode()));
+                Uri reviewContentUri = PopularMoviesProvider.Reviews.withId(cursor.getLong(MoviesTableProjection.MOVIE_ID.getCode()));
                 MovieItem item = makeMovieItem(cursor);
                 Intent intent = new Intent(getActivity(),MovieDetailActivity.class);
-                intent.setData(contentUri);
+                intent.setData(trailerContentUri);
                 //TODO: find the contentUri of the trailers.
-                intent.putExtra(MovieDetailsFragment.REVIEW_URI,contentUri);
+                intent.putExtra(MovieDetailsFragment.REVIEW_URI,reviewContentUri);
                 intent.putExtra("movieItem",item);
                 startActivity(intent);
             }
