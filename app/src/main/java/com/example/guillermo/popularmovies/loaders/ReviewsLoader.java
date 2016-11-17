@@ -29,13 +29,16 @@ public class ReviewsLoader implements LoaderManager.LoaderCallbacks<Cursor> {
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         Log.i(LOG_TAG,"***** onCreateLoader ****");
-        CursorLoader dataCursor = new CursorLoader(context,
-                mUriReviews,
-                null,
-                null,
-                null,
-                null);
-        return dataCursor;
+        if (mUriReviews!=null){
+            CursorLoader dataCursor = new CursorLoader(context,
+                    mUriReviews,
+                    null,
+                    null,
+                    null,
+                    null);
+            return dataCursor;
+        }
+        return null;
     }
 
     @Override
