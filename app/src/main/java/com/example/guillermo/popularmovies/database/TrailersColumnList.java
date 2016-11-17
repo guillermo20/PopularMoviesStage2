@@ -1,6 +1,6 @@
 package com.example.guillermo.popularmovies.database;
 
-import net.simonvt.schematic.annotation.ConflictResolutionType;
+import net.simonvt.schematic.annotation.AutoIncrement;
 import net.simonvt.schematic.annotation.DataType;
 import net.simonvt.schematic.annotation.PrimaryKey;
 import net.simonvt.schematic.annotation.References;
@@ -11,9 +11,9 @@ import net.simonvt.schematic.annotation.References;
 
 public interface TrailersColumnList {
 
-    @DataType(DataType.Type.TEXT) @PrimaryKey(onConflict = ConflictResolutionType.IGNORE)
-    //@AutoIncrement
-    String _ID = "trailer_id";
+    @DataType(DataType.Type.INTEGER) @PrimaryKey
+    @AutoIncrement
+    String _ID = "_id";
 
     @DataType(DataType.Type.TEXT)
     String VIDEO_ID = "video_id";

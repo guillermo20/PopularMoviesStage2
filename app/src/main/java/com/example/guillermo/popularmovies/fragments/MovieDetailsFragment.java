@@ -119,7 +119,7 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         getLoaderManager().initLoader(TRAILERS_LOADER_ID,null,this);
-        getLoaderManager().initLoader(REVIEW_LOADER_ID,null,new ReviewsLoader());
+        getLoaderManager().initLoader(REVIEW_LOADER_ID,null,new ReviewsLoader(mUriReviews,getActivity()));
         super.onActivityCreated(savedInstanceState);
     }
 

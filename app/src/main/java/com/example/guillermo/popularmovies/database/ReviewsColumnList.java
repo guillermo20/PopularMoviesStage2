@@ -1,6 +1,6 @@
 package com.example.guillermo.popularmovies.database;
 
-import net.simonvt.schematic.annotation.ConflictResolutionType;
+import net.simonvt.schematic.annotation.AutoIncrement;
 import net.simonvt.schematic.annotation.DataType;
 import net.simonvt.schematic.annotation.PrimaryKey;
 import net.simonvt.schematic.annotation.References;
@@ -10,11 +10,12 @@ import net.simonvt.schematic.annotation.References;
  */
 
 public interface ReviewsColumnList {
-    @DataType(DataType.Type.TEXT) @PrimaryKey(onConflict = ConflictResolutionType.IGNORE)
-    String _ID = "review_id";
+    @DataType(DataType.Type.INTEGER) @PrimaryKey
+    @AutoIncrement
+    String _ID = "_id";
 
     @DataType(DataType.Type.TEXT)
-    String REVIEWS = "reviews";
+    String REVIEW_ID = "review_id";
 
     @DataType(DataType.Type.TEXT)
     String AUTHOR = "author";

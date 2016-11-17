@@ -86,7 +86,7 @@ public class MoviesSyncAdapter extends AbstractThreadedSyncAdapter {
                         VideoMovieInfo videoItem =VideoMovieInfo.toVideoMovieInfoFromJson(queryResults[j]);
                         listOfVideos.add(videoItem);
                         ContentValues videoContentValues = new ContentValues();
-                        videoContentValues.put(TrailersColumnList._ID,videoItem.getVideoId());
+                        videoContentValues.put(TrailersColumnList.VIDEO_ID,videoItem.getVideoId());
                         videoContentValues.put(TrailersColumnList.MOVIE_ID,movieItem.getMovieId());
                         videoContentValues.put(TrailersColumnList.NAME,videoItem.getName());
                         videoContentValues.put(TrailersColumnList.KEY,videoItem.getKey());
@@ -106,7 +106,7 @@ public class MoviesSyncAdapter extends AbstractThreadedSyncAdapter {
                         reviewContentValues.put(ReviewsColumnList.CONTENT,reviewItem.getContent());
                         reviewContentValues.put(ReviewsColumnList.AUTHOR,reviewItem.getAuthor());
                         reviewContentValues.put(ReviewsColumnList.URL,reviewItem.getUrl());
-                        reviewContentValues.put(ReviewsColumnList._ID,reviewItem.getReviewId());
+                        reviewContentValues.put(ReviewsColumnList.REVIEW_ID,reviewItem.getReviewId());
                         reviewcontentList.add(reviewContentValues);
                     }
                     movieItem.setReviews(reviewMovieInfoResults);
