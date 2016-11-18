@@ -1,6 +1,7 @@
 package com.example.guillermo.popularmovies.fragments;
 
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -12,18 +13,23 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.guillermo.popularmovies.R;
-import com.example.guillermo.popularmovies.enums.MoviesTableProjection;
+import com.example.guillermo.popularmovies.adapters.TrailersAdapter;
+import com.example.guillermo.popularmovies.enums.TrailersTableProjection;
 import com.example.guillermo.popularmovies.loaders.ReviewsLoader;
 import com.example.guillermo.popularmovies.model.MovieItem;
 import com.example.guillermo.popularmovies.model.ReviewMovieInfo;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
+
+import static com.example.guillermo.popularmovies.R.id.trailers_list_view_id;
 
 /**
  * Created by guillermo on 17/09/16.
@@ -53,6 +59,8 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
     private TextView textViewVoteAverage;
     private TextView textViewSynopsis;
     private ImageView posterImageview;
+    private ImageView videoImageView;
+    private TrailersAdapter trailersAdapter;
 
     public MovieDetailsFragment() {
     }
@@ -64,6 +72,7 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        trailersAdapter = new TrailersAdapter(getActivity(),null,0);
         super.onCreate(savedInstanceState);
     }
 
@@ -87,13 +96,31 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
         textViewVoteAverage = (TextView) rootView.findViewById(R.id.movie_details_vote_avg);
         textViewSynopsis = (TextView) rootView.findViewById(R.id.movie_details_synopsis);
         posterImageview = (ImageView) rootView.findViewById(R.id.image_thumbnail);
+        videoImageView = (ImageView) rootView.findViewById(R.id.video_intent);
+        ListView listTrailersView = (ListView) rootView.findViewById(R.id.trailers_list_view_id);
+        listTrailersView.setAdapter(trailersAdapter);
+        listTrailersView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                Cursor cursor = (Cursor) parent.getItemAtPosition(position);
+                Log.i(LOG_TAG, "***** item clicked key = "+cursor.getString(TrailersTableProjection.KEY.getCode()));
+                String site = cursor.getString(TrailersTableProjection.SITE.getCode());
+                String key = cursor.getString(TrailersTableProjection.KEY.getCode());
+                if (site.equalsIgnoreCase("youtube")){
+                    String youtubeUrl = "https://www.youtube.com/watch?v="+key;
+                    Intent intent = new Intent(Intent.ACTION_VIEW);
+                    intent.setData(Uri.parse(youtubeUrl));
+                    getActivity().startActivity(intent);
+                }
+            }
+        });
 //        textViewTitle.setText("Title: "+mMovieItem.getTitle());
 //        textViewReleaseDate.setText("Release date: "+mMovieItem.getReleaseDate());
 //        textViewVoteAverage.setText("Vote: "+mMovieItem.getVoteAverage());
 //        textViewSynopsis.setText("Synopsis: "+mMovieItem.getOverview());
 //        ImageView imageView = (ImageView) rootView.findViewById(R.id.image_thumbnail);
 //        Picasso.with(getActivity()).load(mMovieItem.getBackdropUri(MovieItem.IMAGE_SIZE_W500)).error(R.drawable.error).into(imageView);
-//        ImageView videoImageView = (ImageView) rootView.findViewById(R.id.video_intent);
 //        if (!movieItem.getVideos().isEmpty()){
 //            Log.i(LOG_TAG,"the movie has videos!!");
 //            videoImageView.setVisibility(View.VISIBLE);
@@ -157,19 +184,42 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        //Log.i(LOG_TAG,"*************** init onLoadFinished *********** ");
-        String nameFile = mMovieItem.getPosterPath().replace("/","");
+        trailersAdapter.swapCursor(data);
+        /*if (data.moveToFirst()){
+            do {
+                Log.i(LOG_TAG,"***** data *****"+data.getString(TrailersTableProjection.KEY.getCode()));
+            }while (data.moveToNext());
+        }*/
+        /*String nameFile = mMovieItem.getPosterPath().replace("/","");
         textViewTitle.setText("Title: "+mMovieItem.getTitle());
         textViewReleaseDate.setText("Release date: "+mMovieItem.getReleaseDate());
         textViewVoteAverage.setText("Vote: "+mMovieItem.getVoteAverage());
         textViewSynopsis.setText("Synopsis: "+mMovieItem.getOverview());
         File file = getActivity().getFileStreamPath(nameFile);
         Picasso.with(getActivity()).load(file).error(R.drawable.error).into(posterImageview);
-        //Log.i(LOG_TAG,"*************** end  onLoadFinished *********** ");
+        */
+        /*if(data.moveToFirst()){
+            Log.i(LOG_TAG,"the movie has videos!!");
+            final Cursor cursor = data;
+            String site = cursor.getString(TrailersTableProjection.SITE.getCode());
+            if (site.equalsIgnoreCase("youtube")){
+                videoImageView.setVisibility(View.VISIBLE);
+                videoImageView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String youtubeUrl = "https://www.youtube.com/watch?v="+cursor.getString(TrailersTableProjection.KEY.getCode());
+                        Intent intent = new Intent(Intent.ACTION_VIEW);
+                        intent.setData(Uri.parse(youtubeUrl));
+                        startActivity(intent);
+                    }
+                });
+            }
+
+        }*/
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-        //Log.i(LOG_TAG,"************** onLoaderReset   ***********");
+        trailersAdapter.swapCursor(null);
     }
 }

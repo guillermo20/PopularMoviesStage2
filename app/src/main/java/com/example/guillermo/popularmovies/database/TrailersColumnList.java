@@ -1,9 +1,11 @@
 package com.example.guillermo.popularmovies.database;
 
 import net.simonvt.schematic.annotation.AutoIncrement;
+import net.simonvt.schematic.annotation.ConflictResolutionType;
 import net.simonvt.schematic.annotation.DataType;
 import net.simonvt.schematic.annotation.PrimaryKey;
 import net.simonvt.schematic.annotation.References;
+import net.simonvt.schematic.annotation.Unique;
 
 /**
  * Created by guillermo on 10/24/16.
@@ -15,7 +17,7 @@ public interface TrailersColumnList {
     @AutoIncrement
     String _ID = "_id";
 
-    @DataType(DataType.Type.TEXT)
+    @DataType(DataType.Type.TEXT) @Unique(onConflict = ConflictResolutionType.REPLACE)
     String VIDEO_ID = "video_id";
 
     @DataType(DataType.Type.TEXT)

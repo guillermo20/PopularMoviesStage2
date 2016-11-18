@@ -86,7 +86,6 @@ public class MainGridFragment extends Fragment implements LoaderManager.LoaderCa
                 Uri reviewContentUri = PopularMoviesProvider.Reviews.withId(cursor.getLong(MoviesTableProjection.MOVIE_ID.getCode()));
                 MovieItem item = makeMovieItem(cursor);
                 ((Callback) getActivity()).onItemSelected(trailerContentUri,reviewContentUri,item);
-                //startActivity(intent);
             }
         });
         return root;
