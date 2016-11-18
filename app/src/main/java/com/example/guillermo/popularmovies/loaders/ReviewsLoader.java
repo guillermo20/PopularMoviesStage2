@@ -43,16 +43,9 @@ public class ReviewsLoader implements LoaderManager.LoaderCallbacks<Cursor> {
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        /*Log.i(LOG_TAG,"***** onLoadFinished ****");
-        if (data.moveToFirst()){
-            do {
-                Log.i(LOG_TAG," data = "+data.getString(1)+ " key ="+data.getString(2));
-            }while (data.moveToNext());
-        }*/
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-        //Log.i(LOG_TAG,"***** onLoaderReset ****");
     }
 }
