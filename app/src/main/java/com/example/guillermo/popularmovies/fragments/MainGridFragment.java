@@ -2,7 +2,6 @@ package com.example.guillermo.popularmovies.fragments;
 
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.PorterDuff;
@@ -27,7 +26,6 @@ import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.Spinner;
 
-import com.example.guillermo.popularmovies.MovieDetailActivity;
 import com.example.guillermo.popularmovies.R;
 import com.example.guillermo.popularmovies.adapters.GridAdapter;
 import com.example.guillermo.popularmovies.backgroundtasks.FetchPopularMoviesTask;
@@ -58,6 +56,13 @@ public class MainGridFragment extends Fragment implements LoaderManager.LoaderCa
     public MainGridFragment() {
     }
 
+    public interface Callback {
+        /**
+         * DetailFragmentCallback for when an item has been selected.
+         */
+        public void onItemSelected(Uri trailerContentUri,Uri reviewContentUri,MovieItem item);
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
@@ -80,11 +85,8 @@ public class MainGridFragment extends Fragment implements LoaderManager.LoaderCa
                 Uri trailerContentUri = PopularMoviesProvider.Trailers.withId(cursor.getLong(MoviesTableProjection.MOVIE_ID.getCode()));
                 Uri reviewContentUri = PopularMoviesProvider.Reviews.withId(cursor.getLong(MoviesTableProjection.MOVIE_ID.getCode()));
                 MovieItem item = makeMovieItem(cursor);
-                Intent intent = new Intent(getActivity(),MovieDetailActivity.class);
-                intent.setData(trailerContentUri);
-                intent.putExtra(MovieDetailsFragment.REVIEW_URI,reviewContentUri);
-                intent.putExtra("movieItem",item);
-                startActivity(intent);
+                ((Callback) getActivity()).onItemSelected(trailerContentUri,reviewContentUri,item);
+                //startActivity(intent);
             }
         });
         return root;

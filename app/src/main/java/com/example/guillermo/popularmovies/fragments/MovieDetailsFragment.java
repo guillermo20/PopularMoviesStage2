@@ -13,13 +13,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.guillermo.popularmovies.R;
-import com.example.guillermo.popularmovies.enums.TrailersTableProjection;
+import com.example.guillermo.popularmovies.enums.MoviesTableProjection;
 import com.example.guillermo.popularmovies.loaders.ReviewsLoader;
 import com.example.guillermo.popularmovies.model.MovieItem;
 import com.example.guillermo.popularmovies.model.ReviewMovieInfo;
+import com.squareup.picasso.Picasso;
+
+import java.io.File;
 
 /**
  * Created by guillermo on 17/09/16.
@@ -44,6 +48,20 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
 
     private int REVIEW_LOADER_ID = 2;
 
+    private TextView textViewTitle;
+    private TextView textViewReleaseDate;
+    private TextView textViewVoteAverage;
+    private TextView textViewSynopsis;
+    private ImageView posterImageview;
+
+    public MovieDetailsFragment() {
+    }
+
+    public MovieDetailsFragment(MovieItem mMovieItem, Uri mUriReviews) {
+        this.mMovieItem = mMovieItem;
+        this.mUriReviews = mUriReviews;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,18 +73,20 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
         if (arguments != null) {
             mUri = arguments.getParcelable(this.TRAILER_URI);
             Log.i(LOG_TAG,"************** Uri passed = "+mUri+" ************");
+        }
+        if (mMovieItem==null)
             mMovieItem = (MovieItem) getActivity().getIntent().getSerializableExtra("movieItem");
-            //TODO: use this field to call the reviews loader...
+        if (mUriReviews == null)
             mUriReviews = getActivity().getIntent().getParcelableExtra(MovieDetailsFragment.REVIEW_URI);
 
-        }
 
 
         View rootView = inflater.inflate(R.layout.movie_details_fragment,container,false);
-        TextView textViewTitle = (TextView) rootView.findViewById(R.id.movie_details_title);
-        TextView textViewReleaseDate = (TextView) rootView.findViewById(R.id.movie_details_release_date);
-        TextView textViewVoteAverage = (TextView) rootView.findViewById(R.id.movie_details_vote_avg);
-        TextView textViewSynopsis = (TextView) rootView.findViewById(R.id.movie_details_synopsis);
+        textViewTitle = (TextView) rootView.findViewById(R.id.movie_details_title);
+        textViewReleaseDate = (TextView) rootView.findViewById(R.id.movie_details_release_date);
+        textViewVoteAverage = (TextView) rootView.findViewById(R.id.movie_details_vote_avg);
+        textViewSynopsis = (TextView) rootView.findViewById(R.id.movie_details_synopsis);
+        posterImageview = (ImageView) rootView.findViewById(R.id.image_thumbnail);
 //        textViewTitle.setText("Title: "+mMovieItem.getTitle());
 //        textViewReleaseDate.setText("Release date: "+mMovieItem.getReleaseDate());
 //        textViewVoteAverage.setText("Vote: "+mMovieItem.getVoteAverage());
@@ -138,11 +158,13 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         //Log.i(LOG_TAG,"*************** init onLoadFinished *********** ");
-        if (data.moveToFirst()){
-            do {
-                Log.i(LOG_TAG," data = "+data.getString(TrailersTableProjection.NAME.getCode())+ " key ="+data.getString(TrailersTableProjection.KEY.getCode()));
-            }while (data.moveToNext());
-        }
+        String nameFile = mMovieItem.getPosterPath().replace("/","");
+        textViewTitle.setText("Title: "+mMovieItem.getTitle());
+        textViewReleaseDate.setText("Release date: "+mMovieItem.getReleaseDate());
+        textViewVoteAverage.setText("Vote: "+mMovieItem.getVoteAverage());
+        textViewSynopsis.setText("Synopsis: "+mMovieItem.getOverview());
+        File file = getActivity().getFileStreamPath(nameFile);
+        Picasso.with(getActivity()).load(file).error(R.drawable.error).into(posterImageview);
         //Log.i(LOG_TAG,"*************** end  onLoadFinished *********** ");
     }
 
