@@ -120,6 +120,7 @@ public class MoviesSyncAdapter extends AbstractThreadedSyncAdapter {
                 movieContentValues.put(MoviesColumnList.RELEASE_DATE,movieItem.getReleaseDate());
                 movieContentValues.put(MoviesColumnList.POSTERPATH,movieItem.getPosterPath());
                 movieContentValues.put(MoviesColumnList.OVERVIEW,movieItem.getOverview());
+                movieContentValues.put(MoviesColumnList.VOTE_AVERAGE,movieItem.getVoteAverage());
                 switch (SortingMethod.getByCode(sortingParam)){
                     case POPULAR_MOVIES_SORT:
                         movieContentValues.put(MoviesColumnList.SORT_TYPE_POPULAR,sortingParam);
