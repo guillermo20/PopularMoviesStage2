@@ -23,7 +23,7 @@ android {
         }
     }
     buildTypes.each {
-        it.buildConfigField 'String', 'THE_MOVIEDB_API_KEY', '"myappidkey"'
+        it.buildConfigField 'String', 'THE_MOVIEDB_API_KEY', '"apikey"'
     }
 }
 repositories {
