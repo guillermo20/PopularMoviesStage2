@@ -48,7 +48,7 @@ public class MainGridFragment extends Fragment implements LoaderManager.LoaderCa
     private FetchPopularMoviesTask backgroundTask;
     private GridAdapter adapter;
     private ArrayAdapter<String> sortingAdapter;
-    private String options[] = {"Most Popular","Most Rated"};
+    private String options[] = {"Most Popular","Most Rated","Favorites"};
     private int option=0;
 
     private static final int LOADER_ID = 0;
@@ -88,6 +88,17 @@ public class MainGridFragment extends Fragment implements LoaderManager.LoaderCa
                 ((Callback) getActivity()).onItemSelected(trailerContentUri,reviewContentUri,item);
             }
         });
+        Bundle arguments = getArguments();
+        if (arguments!=null){
+            boolean twoPane = arguments.getBoolean("twopane");
+            if (!twoPane){
+                gridView.setNumColumns(2);
+            } else {
+                gridView.setNumColumns(3);
+            }
+        } else {
+            gridView.setNumColumns(3);
+        }
         return root;
     }
 

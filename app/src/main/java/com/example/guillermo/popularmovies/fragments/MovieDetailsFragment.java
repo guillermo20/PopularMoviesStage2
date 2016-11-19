@@ -193,7 +193,7 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
             }while (data.moveToNext());
         }*/
         String nameFile = mMovieItem.getPosterPath().replace("/","");
-        textViewTitle.setText("Title: "+mMovieItem.getTitle());
+        textViewTitle.setText(mMovieItem.getTitle());
         textViewReleaseDate.setText("Release date: "+mMovieItem.getReleaseDate());
         textViewVoteAverage.setText("Vote: "+mMovieItem.getVoteAverage());
         textViewSynopsis.setText("Synopsis: "+mMovieItem.getOverview());

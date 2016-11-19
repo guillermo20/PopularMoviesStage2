@@ -23,13 +23,17 @@ public class MainActivity extends AppCompatActivity implements MainGridFragment.
         setContentView(R.layout.activity_main);
         if(findViewById(R.id.movie_details_fragment) != null){
             mTwoPane = true;
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.movie_details_fragment, new MovieDetailsFragment(), DETAILFRAGMENT_TAG)
-                    .commit();
+//            getSupportFragmentManager().beginTransaction()
+//                    .replace(R.id.movie_details_fragment, new MovieDetailsFragment(), DETAILFRAGMENT_TAG)
+//                    .commit();
         }
         else {
             mTwoPane = false;
-            getSupportFragmentManager().beginTransaction().add(R.id.main_id,new MainGridFragment()).commit();
+            MainGridFragment fragment = new MainGridFragment();
+            Bundle args = new Bundle();
+            args.putBoolean("twopane",mTwoPane);
+            fragment.setArguments(args);
+            getSupportFragmentManager().beginTransaction().add(R.id.main_id,fragment).commit();
         }
     }
 

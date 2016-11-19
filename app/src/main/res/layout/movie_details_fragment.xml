@@ -7,32 +7,40 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="204dp"
-            android:id="@+id/image_thumbnail"
-            />
-
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="80dp"
             android:id="@+id/movie_details_title"
-            android:textSize="20sp"
+            android:textSize="40sp"
             android:layout_marginBottom="20dp"
-            android:textColor="@color/colorPrimaryDark"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"/>
+            android:textColor="@color/colorWhite"
+            android:textAlignment="center"
+            android:background="@color/colorPrimaryDark"/>
 
-
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="12sp"
-            android:id="@+id/movie_details_release_date"
-            android:layout_marginBottom="20dp"
-            android:textColor="@color/colorPrimaryDark"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"/>
+            android:layout_height="180dp"
+            android:orientation="horizontal">
+            <ImageView
+                android:layout_width="120dp"
+                android:layout_height="match_parent"
+                android:id="@+id/image_thumbnail"
+                android:layout_marginLeft="40dp"
+                />
+
+
+
+            <TextView
+                android:layout_width="100dp"
+                android:layout_height="match_parent"
+                android:textSize="12sp"
+                android:id="@+id/movie_details_release_date"
+                android:layout_marginBottom="20dp"
+                android:textColor="@color/colorPrimaryDark"
+                android:layout_marginLeft="60dp"
+                android:layout_marginRight="8dp"/>
+
+        </LinearLayout>
 
 
         <TextView
