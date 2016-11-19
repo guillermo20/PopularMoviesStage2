@@ -128,6 +128,11 @@ public class MainGridFragment extends Fragment implements LoaderManager.LoaderCa
                         MoviesSyncAdapter.syncImmediately(getActivity());
                         restartLoader();
                         break;
+                    case 2:
+                        editor.putString(SortingMethod.class.getSimpleName().toLowerCase(),SortingMethod.FAVORITES_MOVIES_SORT.getCode());
+                        editor.commit();
+                        restartLoader();
+                        break;
                 }
             }
 

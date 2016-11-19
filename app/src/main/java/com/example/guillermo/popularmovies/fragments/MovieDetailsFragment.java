@@ -1,6 +1,7 @@
 package com.example.guillermo.popularmovies.fragments;
 
 
+import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -15,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -22,6 +24,9 @@ import android.widget.TextView;
 import com.example.guillermo.popularmovies.R;
 import com.example.guillermo.popularmovies.adapters.ReviewsAdapter;
 import com.example.guillermo.popularmovies.adapters.TrailersAdapter;
+import com.example.guillermo.popularmovies.database.MoviesColumnList;
+import com.example.guillermo.popularmovies.database.PopularMoviesProvider;
+import com.example.guillermo.popularmovies.enums.SortingMethod;
 import com.example.guillermo.popularmovies.enums.TrailersTableProjection;
 import com.example.guillermo.popularmovies.loaders.ReviewsLoader;
 import com.example.guillermo.popularmovies.model.MovieItem;
@@ -51,14 +56,15 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
 
     public static final String REVIEW_URI = "REVIEW_URI";
 
-    private int TRAILERS_LOADER_ID = 1;
+    public static int TRAILERS_LOADER_ID = 1;
 
-    private int REVIEW_LOADER_ID = 2;
+    public static int REVIEW_LOADER_ID = 2;
 
     private TextView textViewTitle;
     private TextView textViewReleaseDate;
     private TextView textViewVoteAverage;
     private TextView textViewSynopsis;
+    private Button favoriteButton;
     private ImageView posterImageview;
     private ImageView videoImageView;
     private TrailersAdapter trailersAdapter;
@@ -100,6 +106,7 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
         textViewSynopsis = (TextView) rootView.findViewById(R.id.movie_details_synopsis);
         posterImageview = (ImageView) rootView.findViewById(R.id.image_thumbnail);
         videoImageView = (ImageView) rootView.findViewById(R.id.video_intent);
+        favoriteButton = (Button) rootView.findViewById(R.id.movie_details_favorite_button);
         ListView listTrailersView = (ListView) rootView.findViewById(R.id.trailers_list_view_id);
         listTrailersView.setAdapter(trailersAdapter);
         listTrailersView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -119,6 +126,22 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
         });
         ListView listReviewView = (ListView) rootView.findViewById(R.id.reviews_list_view_id);
         listReviewView.setAdapter(reviewsAdapter);
+        favoriteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i(LOG_TAG,"**button clicked**");
+                ContentValues movieContentValues = new ContentValues();
+                movieContentValues.put(MoviesColumnList.SORT_TYPE_FAVORITES, SortingMethod.FAVORITES_MOVIES_SORT.getCode());
+                String where = MoviesColumnList.MOVIE_ID + "= ?";
+                String[] values = new String[]{mMovieItem.getMovieId()};
+                getActivity().getContentResolver().update(PopularMoviesProvider.Movies.CONTENT_URI,
+                        movieContentValues,
+                        where,
+                        values);
+            }
+
+        });
+
 //        textViewTitle.setText("Title: "+mMovieItem.getTitle());
 //        textViewReleaseDate.setText("Release date: "+mMovieItem.getReleaseDate());
 //        textViewVoteAverage.setText("Vote: "+mMovieItem.getVoteAverage());
