@@ -20,6 +20,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.guillermo.popularmovies.R;
 import com.example.guillermo.popularmovies.adapters.ReviewsAdapter;
@@ -138,6 +139,7 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
                         movieContentValues,
                         where,
                         values);
+                Toast.makeText(getActivity(),"Added to favorites",Toast.LENGTH_SHORT).show();
             }
 
         });
