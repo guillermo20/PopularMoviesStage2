@@ -9,7 +9,7 @@
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="80dp"
+            android:layout_height="wrap_content"
             android:id="@+id/movie_details_title"
             android:textSize="40sp"
             android:layout_marginBottom="20dp"
@@ -19,7 +19,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="180dp"
+            android:layout_height="220dp"
             android:orientation="horizontal">
             <ImageView
                 android:layout_width="120dp"
@@ -29,35 +29,54 @@
                 />
 
 
-
-            <TextView
-                android:layout_width="100dp"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:textSize="12sp"
-                android:id="@+id/movie_details_release_date"
-                android:layout_marginBottom="20dp"
-                android:textColor="@color/colorPrimaryDark"
-                android:layout_marginLeft="60dp"
-                android:layout_marginRight="8dp"/>
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/text_24sp"
+                    android:textAlignment="center"
+                    android:id="@+id/movie_details_release_date"
+                    android:layout_marginBottom="20dp"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/text_16sp"
+                    android:textAlignment="center"
+                    android:id="@+id/movie_details_vote_avg"
+                    android:layout_marginBottom="20dp"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"/>
+
+                <Button
+                    android:layout_width="120dp"
+                    android:layout_height="80dp"
+                    android:text="Mark as favorite"
+                    android:textSize="12sp"
+                    android:layout_gravity="center"
+                    android:textAlignment="center"
+                    android:id="@+id/movie_details_favorite_button"
+                    android:layout_marginBottom="20dp"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"/>
+            </LinearLayout>
+
 
         </LinearLayout>
 
-
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="12sp"
-            android:id="@+id/movie_details_vote_avg"
-            android:layout_marginBottom="20dp"
-            android:textColor="@color/colorPrimaryDark"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"/>
-
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="12sp"
+            android:textSize="@dimen/text_16sp"
             android:id="@+id/movie_details_synopsis"
             android:layout_marginBottom="20dp"
             android:textColor="@color/colorPrimaryDark"

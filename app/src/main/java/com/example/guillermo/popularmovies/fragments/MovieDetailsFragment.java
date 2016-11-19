@@ -29,6 +29,8 @@ import com.example.guillermo.popularmovies.model.ReviewMovieInfo;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
+import java.text.DateFormat;
+import java.util.Date;
 
 import static com.example.guillermo.popularmovies.R.id.trailers_list_view_id;
 
@@ -192,11 +194,12 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
                 Log.i(LOG_TAG,"***** data *****"+data.getString(TrailersTableProjection.KEY.getCode()));
             }while (data.moveToNext());
         }*/
+        String date = mMovieItem.getReleaseDate().substring(0,4);
         String nameFile = mMovieItem.getPosterPath().replace("/","");
         textViewTitle.setText(mMovieItem.getTitle());
-        textViewReleaseDate.setText("Release date: "+mMovieItem.getReleaseDate());
-        textViewVoteAverage.setText("Vote: "+mMovieItem.getVoteAverage());
-        textViewSynopsis.setText("Synopsis: "+mMovieItem.getOverview());
+        textViewReleaseDate.setText(date);
+        textViewVoteAverage.setText(mMovieItem.getVoteAverage() + "/10");
+        textViewSynopsis.setText(mMovieItem.getOverview());
         File file = getActivity().getFileStreamPath(nameFile);
         Picasso.with(getActivity()).load(file).error(R.drawable.error).into(posterImageview);
         /*if(data.moveToFirst()){
