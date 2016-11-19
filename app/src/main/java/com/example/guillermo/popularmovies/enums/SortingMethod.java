@@ -10,7 +10,7 @@ public enum SortingMethod {
 
     POPULAR_MOVIES_SORT("popular"),
     TOP_RATED_MOVIES_SORT("top_rated"),
-    FAVORITES_MOVIES_SORT("FMSS");
+    FAVORITES_MOVIES_SORT("favorite");
 
 
     private String code;

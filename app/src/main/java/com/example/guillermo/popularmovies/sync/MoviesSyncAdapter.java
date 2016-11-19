@@ -86,7 +86,7 @@ public class MoviesSyncAdapter extends AbstractThreadedSyncAdapter {
                         VideoMovieInfo videoItem =VideoMovieInfo.toVideoMovieInfoFromJson(queryResults[j]);
                         listOfVideos.add(videoItem);
                         ContentValues videoContentValues = new ContentValues();
-                        videoContentValues.put(TrailersColumnList._ID,videoItem.getVideoId());
+                        videoContentValues.put(TrailersColumnList.VIDEO_ID,videoItem.getVideoId());
                         videoContentValues.put(TrailersColumnList.MOVIE_ID,movieItem.getMovieId());
                         videoContentValues.put(TrailersColumnList.NAME,videoItem.getName());
                         videoContentValues.put(TrailersColumnList.KEY,videoItem.getKey());
@@ -106,7 +106,7 @@ public class MoviesSyncAdapter extends AbstractThreadedSyncAdapter {
                         reviewContentValues.put(ReviewsColumnList.CONTENT,reviewItem.getContent());
                         reviewContentValues.put(ReviewsColumnList.AUTHOR,reviewItem.getAuthor());
                         reviewContentValues.put(ReviewsColumnList.URL,reviewItem.getUrl());
-                        reviewContentValues.put(ReviewsColumnList._ID,reviewItem.getReviewId());
+                        reviewContentValues.put(ReviewsColumnList.REVIEW_ID,reviewItem.getReviewId());
                         reviewcontentList.add(reviewContentValues);
                     }
                     movieItem.setReviews(reviewMovieInfoResults);
@@ -120,7 +120,18 @@ public class MoviesSyncAdapter extends AbstractThreadedSyncAdapter {
                 movieContentValues.put(MoviesColumnList.RELEASE_DATE,movieItem.getReleaseDate());
                 movieContentValues.put(MoviesColumnList.POSTERPATH,movieItem.getPosterPath());
                 movieContentValues.put(MoviesColumnList.OVERVIEW,movieItem.getOverview());
-                movieContentValues.put(MoviesColumnList.SORT_TYPE,sortingParam);
+                movieContentValues.put(MoviesColumnList.VOTE_AVERAGE,movieItem.getVoteAverage());
+                switch (SortingMethod.getByCode(sortingParam)){
+                    case POPULAR_MOVIES_SORT:
+                        movieContentValues.put(MoviesColumnList.SORT_TYPE_POPULAR,sortingParam);
+                        break;
+                    case TOP_RATED_MOVIES_SORT:
+                        movieContentValues.put(MoviesColumnList.SORT_TYPE_RATED,sortingParam);
+                        break;
+                    case FAVORITES_MOVIES_SORT:
+                        movieContentValues.put(MoviesColumnList.SORT_TYPE_FAVORITES,sortingParam);
+                        break;
+                }
                 movieContentValues.put(MoviesColumnList.POSTER_IMAGE,posterImage);
                 moviecontentlist.add(movieContentValues);
                 context.getContentResolver().insert(PopularMoviesProvider.Movies.CONTENT_URI,movieContentValues);
