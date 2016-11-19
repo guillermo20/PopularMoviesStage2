@@ -20,6 +20,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.guillermo.popularmovies.R;
+import com.example.guillermo.popularmovies.adapters.ReviewsAdapter;
 import com.example.guillermo.popularmovies.adapters.TrailersAdapter;
 import com.example.guillermo.popularmovies.enums.TrailersTableProjection;
 import com.example.guillermo.popularmovies.loaders.ReviewsLoader;
@@ -40,8 +41,6 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
 
     private MovieItem mMovieItem;
 
-    private ArrayAdapter<String> reviewAdapter;
-
     private Uri mUri;
 
     private Uri mUriReviews;
@@ -61,6 +60,7 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
     private ImageView posterImageview;
     private ImageView videoImageView;
     private TrailersAdapter trailersAdapter;
+    private ReviewsAdapter reviewsAdapter;
 
     public MovieDetailsFragment() {
     }
@@ -73,6 +73,7 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
     @Override
     public void onCreate(Bundle savedInstanceState) {
         trailersAdapter = new TrailersAdapter(getActivity(),null,0);
+        reviewsAdapter = new ReviewsAdapter(getActivity(),null,0);
         super.onCreate(savedInstanceState);
     }
 
@@ -102,7 +103,6 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
         listTrailersView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
                 Cursor cursor = (Cursor) parent.getItemAtPosition(position);
                 Log.i(LOG_TAG, "***** item clicked key = "+cursor.getString(TrailersTableProjection.KEY.getCode()));
                 String site = cursor.getString(TrailersTableProjection.SITE.getCode());
@@ -115,6 +115,8 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
                 }
             }
         });
+        ListView listReviewView = (ListView) rootView.findViewById(R.id.reviews_list_view_id);
+        listReviewView.setAdapter(reviewsAdapter);
 //        textViewTitle.setText("Title: "+mMovieItem.getTitle());
 //        textViewReleaseDate.setText("Release date: "+mMovieItem.getReleaseDate());
 //        textViewVoteAverage.setText("Vote: "+mMovieItem.getVoteAverage());
@@ -164,7 +166,7 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         getLoaderManager().initLoader(TRAILERS_LOADER_ID,null,this);
-        getLoaderManager().initLoader(REVIEW_LOADER_ID,null,new ReviewsLoader(mUriReviews,getActivity()));
+        getLoaderManager().initLoader(REVIEW_LOADER_ID,null,new ReviewsLoader(mUriReviews,getActivity(),reviewsAdapter));
         super.onActivityCreated(savedInstanceState);
     }
 
