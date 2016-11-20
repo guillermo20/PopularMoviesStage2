@@ -33,7 +33,8 @@ public class MainActivity extends AppCompatActivity implements MainGridFragment.
             Bundle args = new Bundle();
             args.putBoolean("twopane",mTwoPane);
             fragment.setArguments(args);
-            getSupportFragmentManager().beginTransaction().add(R.id.main_id,fragment).commit();
+            if (savedInstanceState==null)
+                getSupportFragmentManager().beginTransaction().add(R.id.main_id,fragment).commit();
         }
     }
 

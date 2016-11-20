@@ -50,6 +50,7 @@ public class MainGridFragment extends Fragment implements LoaderManager.LoaderCa
     private ArrayAdapter<String> sortingAdapter;
     private String options[] = {"Most Popular","Most Rated","Favorites"};
     private int option=0;
+    private GridView gridView;
 
     private static final int LOADER_ID = 0;
 
@@ -65,29 +66,33 @@ public class MainGridFragment extends Fragment implements LoaderManager.LoaderCa
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-
-        adapter = new GridAdapter(getActivity(),null,0);
-        sortingAdapter = new ArrayAdapter <String> (getActivity(),R.layout.spinner_item,R.id.spinner_texview_id, Arrays.asList(options));
+        if (adapter==null)
+            adapter = new GridAdapter(getActivity(),null,0);
+        if (sortingAdapter ==null)
+            sortingAdapter = new ArrayAdapter <String> (getActivity(),R.layout.spinner_item,R.id.spinner_texview_id, Arrays.asList(options));
         setHasOptionsMenu(true);
         super.onCreate(savedInstanceState);
     }
 
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.main_grid_fragment, container, false);
-        GridView gridView = (GridView) root.findViewById(R.id.main_grid_fragment_id);
-        gridView.setAdapter(adapter);
-        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.i(LOG_TAG, " item clicked position = "+position);
-                Cursor cursor = (Cursor) parent.getItemAtPosition(position);
-                Uri trailerContentUri = PopularMoviesProvider.Trailers.withId(cursor.getLong(MoviesTableProjection.MOVIE_ID.getCode()));
-                Uri reviewContentUri = PopularMoviesProvider.Reviews.withId(cursor.getLong(MoviesTableProjection.MOVIE_ID.getCode()));
-                MovieItem item = makeMovieItem(cursor);
-                ((Callback) getActivity()).onItemSelected(trailerContentUri,reviewContentUri,item);
-            }
-        });
+        View root = container;
+        if (gridView==null){
+            root = inflater.inflate(R.layout.main_grid_fragment, container, false);
+            gridView = (GridView) root.findViewById(R.id.main_grid_fragment_id);
+            gridView.setAdapter(adapter);
+            gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Log.i(LOG_TAG, " item clicked position = "+position);
+                    Cursor cursor = (Cursor) parent.getItemAtPosition(position);
+                    Uri trailerContentUri = PopularMoviesProvider.Trailers.withId(cursor.getLong(MoviesTableProjection.MOVIE_ID.getCode()));
+                    Uri reviewContentUri = PopularMoviesProvider.Reviews.withId(cursor.getLong(MoviesTableProjection.MOVIE_ID.getCode()));
+                    MovieItem item = makeMovieItem(cursor);
+                    ((Callback) getActivity()).onItemSelected(trailerContentUri,reviewContentUri,item);
+                }
+            });
+        }
         Bundle arguments = getArguments();
         if (arguments!=null){
             boolean twoPane = arguments.getBoolean("twopane");
@@ -104,7 +109,7 @@ public class MainGridFragment extends Fragment implements LoaderManager.LoaderCa
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-
+        menu.clear();
         inflater.inflate(R.menu.main_menu,menu);
         MenuItem menuItem = menu.findItem(R.id.main_menu_spinner);
         Spinner spinner = (Spinner) MenuItemCompat.getActionView(menuItem);

@@ -38,6 +38,7 @@ import java.io.File;
 import java.text.DateFormat;
 import java.util.Date;
 
+import static android.R.attr.data;
 import static com.example.guillermo.popularmovies.R.id.trailers_list_view_id;
 
 /**
@@ -192,8 +193,10 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
-        getLoaderManager().initLoader(TRAILERS_LOADER_ID,null,this);
-        getLoaderManager().initLoader(REVIEW_LOADER_ID,null,new ReviewsLoader(mUriReviews,getActivity(),reviewsAdapter));
+        if (mMovieItem!=null){
+            getLoaderManager().initLoader(TRAILERS_LOADER_ID,null,this);
+            getLoaderManager().initLoader(REVIEW_LOADER_ID,null,new ReviewsLoader(mUriReviews,getActivity(),reviewsAdapter));
+        }
         super.onActivityCreated(savedInstanceState);
     }
 
@@ -213,20 +216,23 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        trailersAdapter.swapCursor(data);
+
         /*if (data.moveToFirst()){
             do {
                 Log.i(LOG_TAG,"***** data *****"+data.getString(TrailersTableProjection.KEY.getCode()));
             }while (data.moveToNext());
         }*/
-        String date = mMovieItem.getReleaseDate().substring(0,4);
-        String nameFile = mMovieItem.getPosterPath().replace("/","");
-        textViewTitle.setText(mMovieItem.getTitle());
-        textViewReleaseDate.setText(date);
-        textViewVoteAverage.setText(mMovieItem.getVoteAverage() + "/10");
-        textViewSynopsis.setText(mMovieItem.getOverview());
-        File file = getActivity().getFileStreamPath(nameFile);
-        Picasso.with(getActivity()).load(file).error(R.drawable.error).into(posterImageview);
+        if(mMovieItem!=null){
+            trailersAdapter.swapCursor(data);
+            String date = mMovieItem.getReleaseDate().substring(0,4);
+            String nameFile = mMovieItem.getPosterPath().replace("/","");
+            textViewTitle.setText(mMovieItem.getTitle());
+            textViewReleaseDate.setText(date);
+            textViewVoteAverage.setText(mMovieItem.getVoteAverage() + "/10");
+            textViewSynopsis.setText(mMovieItem.getOverview());
+            File file = getActivity().getFileStreamPath(nameFile);
+            Picasso.with(getActivity()).load(file).error(R.drawable.error).into(posterImageview);
+        }
         /*if(data.moveToFirst()){
             Log.i(LOG_TAG,"the movie has videos!!");
             final Cursor cursor = data;
