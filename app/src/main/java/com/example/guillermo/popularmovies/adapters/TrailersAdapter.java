@@ -36,25 +36,6 @@ public class TrailersAdapter extends CursorAdapter {
     public void bindView(View view, Context context, Cursor cursor) {
         ImageView imageView = (ImageView) view;
         imageView.setVisibility(View.VISIBLE);
-        //Log.i(LOG_TAG, "***** bindview trailer key = "+cursor.getString(TrailersTableProjection.KEY.getCode()));
-        /*//if(cursor.moveToFirst()){
-            //do {
-                String site = cursor.getString(TrailersTableProjection.SITE.getCode());
-                final String key = cursor.getString(TrailersTableProjection.KEY.getCode());
-                final Context context1 = this.context;
-                if (site.equalsIgnoreCase("youtube")){
-                    imageView.setVisibility(View.VISIBLE);
-                    imageView.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            String youtubeUrl = "https://www.youtube.com/watch?v="+key;
-                            Intent intent = new Intent(Intent.ACTION_VIEW);
-                            intent.setData(Uri.parse(youtubeUrl));
-                            context1.startActivity(intent);
-                        }
-                    });
-                }
-            //}while (cursor.moveToNext());
-        //}*/
+
     }
 }

@@ -145,36 +145,6 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
 
         });
 
-//        textViewTitle.setText("Title: "+mMovieItem.getTitle());
-//        textViewReleaseDate.setText("Release date: "+mMovieItem.getReleaseDate());
-//        textViewVoteAverage.setText("Vote: "+mMovieItem.getVoteAverage());
-//        textViewSynopsis.setText("Synopsis: "+mMovieItem.getOverview());
-//        ImageView imageView = (ImageView) rootView.findViewById(R.id.image_thumbnail);
-//        Picasso.with(getActivity()).load(mMovieItem.getBackdropUri(MovieItem.IMAGE_SIZE_W500)).error(R.drawable.error).into(imageView);
-//        if (!movieItem.getVideos().isEmpty()){
-//            Log.i(LOG_TAG,"the movie has videos!!");
-//            videoImageView.setVisibility(View.VISIBLE);
-//            videoImageView.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    Log.i(LOG_TAG,"the video intent must be called");
-//
-//                    String youtubeUrl = "https://www.youtube.com/watch?v="+movieItem.getVideos().get(0).getKey();
-//                    Intent intent = new Intent(Intent.ACTION_VIEW);
-//                    intent.setData(Uri.parse(youtubeUrl));
-//                    startActivity(intent);
-//                }
-//            });
-//        }
-//
-//        String[] result = returnReviews(movieItem);
-//        if(result!=null){
-//            List<String> data= new ArrayList<String>(Arrays.asList(result));
-//            reviewAdapter = new ArrayAdapter<String>(getActivity(),R.layout.review_item,R.id.review_textview,data);
-//            ListView reviewsListview = (ListView) rootView.findViewById(R.id.reviews_list_view_id);
-//            reviewsListview.setAdapter(reviewAdapter);
-//        }
-
         return rootView;
     }
 
@@ -217,11 +187,6 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
 
-        /*if (data.moveToFirst()){
-            do {
-                Log.i(LOG_TAG,"***** data *****"+data.getString(TrailersTableProjection.KEY.getCode()));
-            }while (data.moveToNext());
-        }*/
         if(mMovieItem!=null){
             trailersAdapter.swapCursor(data);
             String date = mMovieItem.getReleaseDate().substring(0,4);
@@ -233,24 +198,6 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
             File file = getActivity().getFileStreamPath(nameFile);
             Picasso.with(getActivity()).load(file).error(R.drawable.error).into(posterImageview);
         }
-        /*if(data.moveToFirst()){
-            Log.i(LOG_TAG,"the movie has videos!!");
-            final Cursor cursor = data;
-            String site = cursor.getString(TrailersTableProjection.SITE.getCode());
-            if (site.equalsIgnoreCase("youtube")){
-                videoImageView.setVisibility(View.VISIBLE);
-                videoImageView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        String youtubeUrl = "https://www.youtube.com/watch?v="+cursor.getString(TrailersTableProjection.KEY.getCode());
-                        Intent intent = new Intent(Intent.ACTION_VIEW);
-                        intent.setData(Uri.parse(youtubeUrl));
-                        startActivity(intent);
-                    }
-                });
-            }
-
-        }*/
     }
 
     @Override

@@ -9,7 +9,6 @@ import com.example.guillermo.popularmovies.fragments.MainGridFragment;
 import com.example.guillermo.popularmovies.fragments.MovieDetailsFragment;
 import com.example.guillermo.popularmovies.model.MovieItem;
 
-;
 
 public class MainActivity extends AppCompatActivity implements MainGridFragment.Callback{
 
@@ -23,9 +22,6 @@ public class MainActivity extends AppCompatActivity implements MainGridFragment.
         setContentView(R.layout.activity_main);
         if(findViewById(R.id.movie_details_fragment) != null){
             mTwoPane = true;
-//            getSupportFragmentManager().beginTransaction()
-//                    .replace(R.id.movie_details_fragment, new MovieDetailsFragment(), DETAILFRAGMENT_TAG)
-//                    .commit();
         }
         else {
             mTwoPane = false;
