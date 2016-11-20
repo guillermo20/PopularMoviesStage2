@@ -189,7 +189,7 @@ public class MovieDetailsFragment extends Fragment implements LoaderManager.Load
 
         if(mMovieItem!=null){
             trailersAdapter.swapCursor(data);
-            String date = mMovieItem.getReleaseDate().substring(0,4);
+            String date = mMovieItem.getReleaseDate().substring(8,10)+"-"+mMovieItem.getReleaseDate().substring(5,7)+"-"+mMovieItem.getReleaseDate().substring(0,4);
             String nameFile = mMovieItem.getPosterPath().replace("/","");
             textViewTitle.setText(mMovieItem.getTitle());
             textViewReleaseDate.setText(date);
