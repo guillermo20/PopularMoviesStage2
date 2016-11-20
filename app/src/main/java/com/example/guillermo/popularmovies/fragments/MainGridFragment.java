@@ -51,8 +51,10 @@ public class MainGridFragment extends Fragment implements LoaderManager.LoaderCa
     private String options[] = {"Most Popular","Most Rated","Favorites"};
     private int option=0;
     private GridView gridView;
-
+    private int spinnerPos=0;
     private static final int LOADER_ID = 0;
+
+    private final String SORT_TYPE = "sortType";
 
     public MainGridFragment() {
     }
@@ -65,7 +67,16 @@ public class MainGridFragment extends Fragment implements LoaderManager.LoaderCa
     }
 
     @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putInt(SORT_TYPE, spinnerPos);
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
+        if (savedInstanceState != null){
+            spinnerPos = savedInstanceState.getInt(SORT_TYPE);
+        }
         if (adapter==null)
             adapter = new GridAdapter(getActivity(),null,0);
         if (sortingAdapter ==null)
@@ -115,11 +126,13 @@ public class MainGridFragment extends Fragment implements LoaderManager.LoaderCa
         Spinner spinner = (Spinner) MenuItemCompat.getActionView(menuItem);
         spinner.setAdapter(sortingAdapter);
         spinner.getPopupBackground().setColorFilter(getResources().getColor(R.color.colorPrimaryDark), PorterDuff.Mode.SCREEN);
+        spinner.setSelection(spinnerPos);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Log.v(LOG_TAG,"clicked on item from spinner");
                 SharedPreferences.Editor editor = getActivity().getSharedPreferences(SortingMethod.class.getSimpleName().toLowerCase(),Context.MODE_PRIVATE).edit();
+                spinnerPos=position;
                 switch (position){
                     case 0:
                         editor.putString(SortingMethod.class.getSimpleName().toLowerCase(),SortingMethod.POPULAR_MOVIES_SORT.getCode());
